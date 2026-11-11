@@ -1,5 +1,7 @@
 # Đồ án RTOS – HK2 2025-2026 (GVHD: Huỳnh Hoàng Hà)
 
+**Sinh viên:** Lê Ngọc Hoàn – MSSV 24119038
+
 Thư mục gồm đủ 2 project theo đề "Task GK + CK". Video chạy thử project cá nhân: [`media/demo_esp32s3.mp4`](media/demo_esp32s3.mp4).
 
 | Project | Tỷ trọng | Thư mục |
@@ -20,6 +22,7 @@ RTOS_Project/
 │   └── 06_ps_petalinux/             driver/app PS, giả lập trên PC, Vivado TCL, PetaLinux
 ├── 03_Reports/
     ├── Report_Project_CaNhan_FreeRTOS_v2.docx   báo cáo cá nhân (bản mới, ít code, nhiều hình)
+    ├── Report_Project_CaNhan_FreeRTOS_v2.pdf    bản PDF, xem trực tiếp trên GitHub
     ├── Report_Project_CaNhan_FreeRTOS.docx      bản cũ
     ├── Slide_Tuan2_ProjectCaNhan.pptx
     ├── Slide_Tuan3_ProjectCaNhan.pptx
@@ -43,6 +46,6 @@ RTOS_Project/
 | Vivado / PetaLinux / kit | **Chưa** (cần Vivado + kit) | `06_ps_petalinux/README.md` |
 
 ## Việc cần làm tiếp
-1. Điền họ tên, MSSV trong report; thử nốt kiểm thử 5, 6; tìm lỗi bộ đếm bị đặt lại (mục 6.3 report).
+1. Thử nốt kiểm thử 5, 6; tìm lỗi bộ đếm bị đặt lại (mục 6.3 report).
 2. Chạy MNIST trên Colab → chạy lại `export_hw.py` → `make run` + `bash 05_rtl/sim/run_all.sh` → cập nhật số liệu slide nhóm.
 3. Vivado + PetaLinux trên kit của lớp (mặc định script là Ultra96-V2, đổi part nếu khác).

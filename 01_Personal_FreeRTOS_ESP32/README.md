@@ -1,8 +1,10 @@
 # Project cá nhân (70%) – FreeRTOS trên ESP32-S3
 
+Sinh viên: **Lê Ngọc Hoàn** – MSSV **24119038** · GVHD: Huỳnh Hoàng Hà
+
 8 task + 1 software timer trên ESP32-S3: LED, nút nhấn, cảm biến, OLED, đồng bộ bằng semaphore, mutex, queue, event group, task notification.
 
-**Video chạy thử:** [`../media/demo_esp32s3.mp4`](../media/demo_esp32s3.mp4) (28 s) · **Báo cáo:** [`../03_Reports/Report_Project_CaNhan_FreeRTOS_v2.docx`](../03_Reports/Report_Project_CaNhan_FreeRTOS_v2.docx)
+**Video chạy thử:** [`../media/demo_esp32s3.mp4`](../media/demo_esp32s3.mp4) (28 s) · **Báo cáo:** [PDF](../03_Reports/Report_Project_CaNhan_FreeRTOS_v2.pdf) / [Word](../03_Reports/Report_Project_CaNhan_FreeRTOS_v2.docx)
 
 ![Mạch thật](docs/figures/f6_video_plate.jpg)
 
