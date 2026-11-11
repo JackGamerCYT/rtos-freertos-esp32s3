@@ -1,0 +1,26 @@
+[
+ {
+  "name": "Teacher (biết thông số thật – không có ngoài đời)",
+  "alive_pct": 100.0,
+  "rms_theta_deg": 0.4821402989410495,
+  "rms_pos_cm": 6.036161371841551
+ },
+ {
+  "name": "LQR danh định",
+  "alive_pct": 100.0,
+  "rms_theta_deg": 0.7241432199463052,
+  "rms_pos_cm": 22.173528483220526
+ },
+ {
+  "name": "MLP float (C thuần trên ESP32)",
+  "alive_pct": 100.0,
+  "rms_theta_deg": 0.5101629860116368,
+  "rms_pos_cm": 9.3626865016304
+ },
+ {
+  "name": "MLP int8 (TFLite Micro)",
+  "alive_pct": 100.0,
+  "rms_theta_deg": 0.5488083464601704,
+  "rms_pos_cm": 8.34947843886923
+ }
+]

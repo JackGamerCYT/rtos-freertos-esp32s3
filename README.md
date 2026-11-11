@@ -7,7 +7,8 @@ Thư mục gồm đủ 2 project theo đề "Task GK + CK". Video chạy thử p
 | Project | Tỷ trọng | Thư mục |
 |---|---|---|
 | Cá nhân: FreeRTOS trên ESP32 | 70% | `01_Personal_FreeRTOS_ESP32/` |
-| Nhóm: Kiến trúc HW cho model AI nhẹ trên kit SoC | 30% | `02_Group_HW_AI_Accelerator/` |
+| Project 30%: Kiến trúc HW cho model AI nhẹ trên kit SoC (thực hiện cá nhân) | 30% | `02_Group_HW_AI_Accelerator/` |
+| Mở rộng: xe cân bằng ESP32-S3 chạy model AI (Colab + FreeRTOS) | – | `04_BalanceBot_ESP32S3/` |
 | Báo cáo + slide tiến độ | – | `03_Reports/` |
 
 ```
@@ -22,12 +23,12 @@ RTOS_Project/
 │   └── 06_ps_petalinux/             driver/app PS, giả lập trên PC, Vivado TCL, PetaLinux
 ├── 03_Reports/
     ├── Report_Project_CaNhan_FreeRTOS_v2.docx   báo cáo cá nhân (bản mới, ít code, nhiều hình)
-    ├── Report_Project_CaNhan_FreeRTOS_v2.pdf    bản PDF, xem trực tiếp trên GitHub
     ├── Report_Project_CaNhan_FreeRTOS.docx      bản cũ
     ├── Slide_Tuan2_ProjectCaNhan.pptx
     ├── Slide_Tuan3_ProjectCaNhan.pptx
     ├── Slide_Tuan4_ProjectCaNhan.pptx
-    └── Slide_ProjectNhom_NPU_DMSA.pptx
+    └── Slide_Project_NPU_DMSA.pptx
+├── 04_BalanceBot_ESP32S3/           xe cân bằng: notebook Colab huấn luyện MLP + firmware FreeRTOS
 └── media/demo_esp32s3.mp4          video chạy trên kit
 ```
 
@@ -47,5 +48,5 @@ RTOS_Project/
 
 ## Việc cần làm tiếp
 1. Thử nốt kiểm thử 5, 6; tìm lỗi bộ đếm bị đặt lại (mục 6.3 report).
-2. Chạy MNIST trên Colab → chạy lại `export_hw.py` → `make run` + `bash 05_rtl/sim/run_all.sh` → cập nhật số liệu slide nhóm.
+2. Chạy MNIST trên Colab → chạy lại `export_hw.py` → `make run` + `bash 05_rtl/sim/run_all.sh` → cập nhật số liệu slide NPU.
 3. Vivado + PetaLinux trên kit của lớp (mặc định script là Ultra96-V2, đổi part nếu khác).
