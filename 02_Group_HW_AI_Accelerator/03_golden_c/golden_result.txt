@@ -1,0 +1,2 @@
+Golden C: 360 anh, accuracy = 94.72%, khop bit voi Python: CO (0 sai)
+Layer mode: L0=INT8 L1=POT L2=INT8

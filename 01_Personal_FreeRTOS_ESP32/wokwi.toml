@@ -1,0 +1,5 @@
+# Mô phỏng bằng extension Wokwi for VS Code: build bằng PlatformIO trước, rồi F1 -> "Wokwi: Start Simulator"
+[wokwi]
+version = 1
+firmware = '.pio/wokwi/firmware.bin'
+elf = '.pio/wokwi/firmware.elf'

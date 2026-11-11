@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "author": "MrZ",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-led", "id": "led1", "top": -120, "left": 200, "attrs": { "color": "red", "label": "LED1" } },
+    { "type": "wokwi-led", "id": "led2", "top": -120, "left": 260, "attrs": { "color": "green", "label": "LED2" } },
+    { "type": "wokwi-led", "id": "led3", "top": -120, "left": 320, "attrs": { "color": "yellow", "label": "LED3" } },
+    { "type": "wokwi-resistor", "id": "r1", "top": -40, "left": 190, "rotate": 90, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r2", "top": -40, "left": 250, "rotate": 90, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r3", "top": -40, "left": 310, "rotate": 90, "attrs": { "value": "220" } },
+    { "type": "wokwi-pushbutton", "id": "btn1", "top": 160, "left": 220, "attrs": { "color": "blue", "label": "BTN1" } },
+    { "type": "wokwi-pushbutton", "id": "btn2", "top": 230, "left": 220, "attrs": { "color": "red", "label": "BTN2" } },
+    { "type": "wokwi-photoresistor-sensor", "id": "ldr", "top": 300, "left": -40, "attrs": {} },
+    { "type": "board-ssd1306", "id": "oled", "top": 60, "left": 400, "attrs": { "i2cAddress": "0x3c" } }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "esp:25", "r1:2", "green", [] ], [ "r1:1", "led1:A", "green", [] ], [ "led1:C", "esp:GND.2", "black", [] ],
+    [ "esp:26", "r2:2", "green", [] ], [ "r2:1", "led2:A", "green", [] ], [ "led2:C", "esp:GND.2", "black", [] ],
+    [ "esp:27", "r3:2", "green", [] ], [ "r3:1", "led3:A", "green", [] ], [ "led3:C", "esp:GND.2", "black", [] ],
+    [ "esp:32", "btn1:1.l", "blue", [] ], [ "btn1:2.l", "esp:GND.1", "black", [] ],
+    [ "esp:33", "btn2:1.l", "red", [] ], [ "btn2:2.l", "esp:GND.1", "black", [] ],
+    [ "ldr:VCC", "esp:3V3", "red", [] ], [ "ldr:GND", "esp:GND.1", "black", [] ], [ "ldr:AO", "esp:34", "orange", [] ],
+    [ "oled:VCC", "esp:3V3", "red", [] ], [ "oled:GND", "esp:GND.2", "black", [] ],
+    [ "oled:SDA", "esp:21", "blue", [] ], [ "oled:SCL", "esp:22", "purple", [] ]
+  ],
+  "dependencies": {}
+}

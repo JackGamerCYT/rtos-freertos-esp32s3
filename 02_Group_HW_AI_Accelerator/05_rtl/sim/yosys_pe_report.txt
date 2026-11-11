@@ -1,0 +1,7 @@
+# Ước lượng tài nguyên 1 PE bằng Yosys 0.33 synth_xilinx (xc7, tương đương Zynq-7000/ước lượng cho ZU+). Chưa phải số Vivado.
+PE_MODE=0         LUT=95 FF=48 DSP=1 CARRY4=12
+PE_MODE=1         LUT=1 FF=16 DSP=1 CARRY4=0
+PE_MODE=2         LUT=69 FF=48 DSP=0 CARRY4=12
+PE_MODE=0 -nodsp  LUT=239 FF=48 DSP=0 CARRY4=16
+PE_MODE=1 -nodsp  LUT=190 FF=48 DSP=0 CARRY4=12
+PE_MODE=2 -nodsp  LUT=69 FF=48 DSP=0 CARRY4=12

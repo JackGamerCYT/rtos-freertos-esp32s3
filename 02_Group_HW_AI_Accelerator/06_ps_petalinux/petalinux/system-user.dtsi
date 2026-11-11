@@ -1,0 +1,11 @@
+/* Thêm vào project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi
+   Biến node của NPU thành UIO để app mmap /dev/uio0 và chờ ngắt bằng read(). */
+/include/ "system-conf.dtsi"
+/ {
+    chosen {
+        bootargs = "earlycon console=ttyPS0,115200 clk_ignore_unused uio_pdrv_genirq.of_id=generic-uio";
+    };
+};
+&npu_0 {
+    compatible = "generic-uio";
+};

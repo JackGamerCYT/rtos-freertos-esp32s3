@@ -1,0 +1,11 @@
+tb_pe: 34816 truong hop, 0 loi -> PASS
+img0_L0      RESULT PASS : 512/512 dung, compute = 760 chu ky (4608 MAC, 6.1 MAC/chu ky)
+img0_L1      RESULT PASS : 256/256 dung, compute = 632 chu ky (18432 MAC, 29.2 MAC/chu ky)
+img0_L2      RESULT PASS : 10/10 dung, compute = 300 chu ky (640 MAC, 2.1 MAC/chu ky)
+rand_big     RESULT PASS : 640/640 dung, compute = 1360 chu ky (32000 MAC, 23.5 MAC/chu ky)
+rand_int8    RESULT PASS : 143/143 dung, compute = 364 chu ky (715 MAC, 2.0 MAC/chu ky)
+rand_pot     RESULT PASS : 153/153 dung, compute = 654 chu ky (3519 MAC, 5.4 MAC/chu ky)
+rand_raw     RESULT PASS : 60/60 dung, compute = 378 chu ky (2400 MAC, 6.3 MAC/chu ky)
+shape_mnist_L0 RESULT PASS : 6272/6272 dung, compute = 9310 chu ky (56448 MAC, 6.1 MAC/chu ky)
+shape_mnist_L1 RESULT PASS : 3136/3136 dung, compute = 7900 chu ky (225792 MAC, 28.6 MAC/chu ky)
+shape_mnist_L2 RESULT PASS : 10/10 dung, compute = 1740 chu ky (7840 MAC, 4.5 MAC/chu ky)
