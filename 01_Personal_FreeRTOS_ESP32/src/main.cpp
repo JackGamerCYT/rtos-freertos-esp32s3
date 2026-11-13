@@ -90,21 +90,32 @@ static void task1_led1(void *arg) {
 }
 
 // ---------------- Task 2: đọc cảm biến ánh sáng, 500 ms/lần ----------------
-static float raw_to_lux(uint16_t raw) {
-  // Module LDR: AO tăng khi tối. Công thức theo thông số Wokwi (GAMMA 0.7, RL10 = 50k), chỉ để ước lượng.
-  const float GAMMA = 0.7f, RL10 = 50.0f;
-  float v = raw / 4095.0f * 3.3f;
-  if (v >= 3.29f) return 0.0f;
-  float r = 2000.0f * v / (1.0f - v / 3.3f);
-  return powf(RL10 * 1e3f * powf(10.0f, GAMMA) / r, 1.0f / GAMMA);
+static float mv_to_lux(uint32_t mv) {
+  // 3V3 -[LDR_R_FIXED]- ADC -[quang trở]- GND: tối -> R quang trở lớn -> điện áp cao
+  float v = mv / 1000.0f;
+  if (v >= 3.25f) return 0.0f;
+  if (v < 0.005f) v = 0.005f;
+  float r = LDR_R_FIXED * v / (3.3f - v);                    // điện trở quang trở
+  return 10.0f * powf(LDR_RL10 / r, 1.0f / LDR_GAMMA);       // R = RL10 * (lux/10)^-gamma
+}
+
+static uint8_t lux_to_percent(float lux) {
+  // thang log: 1 lux = 0 %, LUX_FULL = 100 % (mắt người cảm nhận độ sáng theo log)
+  if (lux <= 1.0f) return 0;
+  float p = log10f(lux) / log10f(LUX_FULL) * 100.0f;
+  return (uint8_t)(p > 100.0f ? 100.0f : p);
 }
 
 static void task2_sensor(void *arg) {
   TickType_t last = xTaskGetTickCount();
+  uint32_t nlog = 0;
   for (;;) {
     uint16_t raw = analogRead(PIN_LDR);
-    float lux = raw_to_lux(raw);
-    uint8_t pct = (uint8_t)(100 - (raw * 100UL) / 4095);
+    uint32_t mv = analogReadMilliVolts(PIN_LDR);   // đã hiệu chỉnh theo eFuse của chip
+    float lux = mv_to_lux(mv);
+    uint8_t pct = lux_to_percent(lux);
+    if ((++nlog & 1) == 0)                                              // log mỗi 1 s
+      logf("LDR raw=%u %lumV light=%u%% ~%.0f lx", raw, (unsigned long)mv, pct, lux);
 
     if (xSemaphoreTake(g_sensorMutex, pdMS_TO_TICKS(50)) == pdTRUE) {   // [K5]
       g_sensor.raw = raw;
@@ -396,6 +407,10 @@ static void heartbeat_cb(TimerHandle_t t) {
 }
 
 void setup() {
+#if ARDUINO_USB_CDC_ON_BOOT
+  // USB CDC mặc định đệm gửi 256 B: monitor in 9 dòng liền nhau sẽ làm rơi byte -> tăng đệm
+  Serial.setTxBufferSize(2048);
+#endif
   Serial.begin(115200);
   pinMode(PIN_LED1, OUTPUT);
   pinMode(PIN_LED2, OUTPUT);

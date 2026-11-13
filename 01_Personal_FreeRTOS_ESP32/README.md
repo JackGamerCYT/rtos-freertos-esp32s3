@@ -4,13 +4,15 @@ Sinh viên: **Lê Ngọc Hoàn** – MSSV **24119038** · GVHD: Huỳnh Hoàng H
 
 8 task + 1 software timer trên ESP32-S3: LED, nút nhấn, cảm biến, OLED, đồng bộ bằng semaphore, mutex, queue, event group, task notification.
 
-**Video chạy thử:** [`../media/demo_esp32s3.mp4`](../media/demo_esp32s3.mp4) (28 s) · **Báo cáo:** [PDF](../03_Reports/Report_Project_CaNhan_FreeRTOS_v2.pdf) / [Word](../03_Reports/Report_Project_CaNhan_FreeRTOS_v2.docx)
+**Video chạy thử:** [`../media/demo_esp32s3.mp4`](../media/demo_esp32s3.mp4) (57 s, 13/11/2026) · **Báo cáo:** [`../03_Reports/Report_Project_CaNhan_FreeRTOS_v2.docx`](../03_Reports/Report_Project_CaNhan_FreeRTOS_v2.docx)
 
 ![Mạch thật](docs/figures/f6_video_plate.jpg)
 
 | Kết quả đo (log Serial) | |
 |---|---|
-| LED3 sáng sau mỗi lần nhấn BTN2 | 3 000 ms, 5/5 lần |
+| LED3 sáng sau mỗi lần nhấn BTN2 | 3 000 ms, 7/7 lần |
+| Che tay / rọi đèn lên quang trở | 57 % → 16 % (~3 lux) / 100 % (~1 600 lux) |
+| BTN2 bấm liên tiếp khi LED3 sáng | lần sau báo `da co san`, LED3 nối thêm đúng 1 lượt |
 | Chu kỳ heartbeat | 5 000 ms |
 | Log bị rơi sau hơn 10 phút | 0 |
 | RAM / Flash | 7.1 % / 11.5 % |
@@ -27,13 +29,13 @@ Sinh viên: **Lê Ngọc Hoàn** – MSSV **24119038** · GVHD: Huỳnh Hoàng H
 | BTN1 → GND | GPIO15 | GPIO32 | INPUT_PULLUP |
 | BTN2 → GND | GPIO16 | GPIO33 | INPUT_PULLUP, cấp binary semaphore |
 | Nút BOOT (có sẵn) | GPIO0 | GPIO0 | ngắt → Task 8 in thông tin stack/heap |
-| Module cảm biến (AO/S) | GPIO1 | GPIO34 | ADC1, Task 2 (bài dùng module hồng ngoại; thay quang trở để đo ánh sáng) |
+| Quang trở + điện trở 2,2 kΩ (cầu chia: 3V3–2,2k–GPIO1–quang trở–GND) | GPIO1 | GPIO34 | ADC1, Task 2 |
 | OLED SSD1306 I2C 0x3C | SDA 10, SCL 11 | SDA 21, SCL 22 | Task 6, 100 kHz, tự dò cặp chân nếu không thấy |
 
 ## Chạy
 1. VS Code (đã cài extension PlatformIO + Wokwi), mở thư mục này. Thanh trạng thái dưới cùng: chọn env `esp32s3`.
 2. Bấm ✓ (Build) → → (Upload) → 🔌 (Serial Monitor, 115200).
-3. Kit đang cắm cổng **COM/UART** (CH343, COM6) nên `ARDUINO_USB_CDC_ON_BOOT=0`. Nếu cắm cổng **USB gốc** (USB-Serial/JTAG) thì đổi thành 1.
+3. Kit đang cắm cổng **USB gốc** (COM4) nên `ARDUINO_USB_CDC_ON_BOOT=1`, cổng ghi cố định `upload_port/monitor_port = COM4` (máy có nhiều cổng COM ảo). Cắm cổng **UART** (CH343) thì đổi về 0 và sửa số cổng. Chip reset thì phải mở lại Serial Monitor.
 4. Upload không vào được: giữ nút BOOT, nhấn RST, thả BOOT rồi Upload lại.
 5. Không có phần cứng: F1 → *Wokwi: Start Simulator* (sơ đồ S3 trong `diagram.json`, sơ đồ ESP32 thường trong `docs/diagram_esp32dev.json`).
 6. File nạp sẵn: `prebuilt_esp32s3/firmware.factory.bin` (nạp ở địa chỉ 0x0 bằng ESP Web Flasher / esptool nếu không muốn build).
@@ -61,4 +63,4 @@ Sinh viên: **Lê Ngọc Hoàn** – MSSV **24119038** · GVHD: Huỳnh Hoàng H
 Báo cáo đầy đủ: `../03_Reports/Report_Project_CaNhan_FreeRTOS_v2.docx`.
 
 ## Lỗi còn mở
-Bộ đếm toàn cục `g_btn2Count` và `g_sensor.seq` đôi khi bị đặt lại về giá trị nhỏ dù chip không reset (thấy ở ~765 s và trong video). Nghi ghi tràn bộ nhớ quanh 0x3fc98960; hướng tìm: watchpoint phần cứng trên địa chỉ biến. Xem mục 6.3 của báo cáo.
+Bộ đếm toàn cục `g_btn2Count` và `g_sensor.seq` đôi khi bị đặt lại về giá trị nhỏ dù chip không reset (thấy ở ~765 s và trong video). Nghi ghi tràn bộ nhớ quanh 0x3fc98960; hướng tìm: watchpoint phần cứng trên địa chỉ biến. Buổi chạy 13/11 (hơn 430 s) không gặp lại. Xem mục 6.3 của báo cáo.

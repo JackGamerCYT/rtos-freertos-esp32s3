@@ -10,7 +10,7 @@
 #define PIN_BTN1      15   // nút nhấn nối GND, dùng INPUT_PULLUP
 #define PIN_BTN2      16
 #define PIN_BTN_BOOT   0   // nút BOOT có sẵn trên kit -> ngắt (ISR) cho task Monitor
-#define PIN_LDR        1   // AO của module quang trở, ADC1_CH0
+#define PIN_LDR        1   // điểm giữa cầu chia: 3V3 -[R 2.2k]- GPIO1 -[quang trở]- GND (ADC1_CH0)
 #define PIN_SDA       10   // mạch thật: GPIO8 bị kéo xuống GND nên chuyển OLED sang 10/11
 #define PIN_SCL       11   // main.cpp vẫn tự dò cặp 8/9, 17/18, 41/42 nếu cắm khác
 #else
@@ -26,6 +26,12 @@
 #define PIN_SCL       22
 #endif
 #define OLED_ADDR   0x3C
+
+// ---- Quang trở (cầu chia áp) ----
+#define LDR_R_FIXED   2200.0f   // Ω, điện trở nối 3V3 -> chân ADC
+#define LDR_RL10     15000.0f   // Ω, quang trở 5 mm loại GL55xx ở 10 lux (8-20 kΩ)
+#define LDR_GAMMA        0.7f   // hệ số dốc của quang trở
+#define LUX_FULL      1000.0f   // độ rọi ứng với 100 % (ánh sáng gần cửa sổ/đèn bàn)
 
 // ---- Chu kỳ các task (ms) ----
 #define T_LED1_MS        200   // Task 1: chu kỳ nháy, mỗi nửa chu kỳ đảo 1 lần
