@@ -25,6 +25,7 @@ RTOS_Project/
     ├── Report_Project_CaNhan_FreeRTOS_v2.docx / .pdf   báo cáo cá nhân (bản mới, ít code, nhiều hình)
     ├── Report_Personal_Project_FreeRTOS_EN.docx / .pdf   báo cáo cá nhân bản tiếng Anh
     ├── Slide_BaoCao_CuoiKy_ProjectCaNhan.pptx   slide báo cáo cuối kỳ (lời thuyết trình trong Notes)
+    ├── Slide_FinalReport_PersonalProject_EN.pptx   slide báo cáo cuối kỳ bản tiếng Anh (speaker notes tiếng Anh)
     ├── TaiLieu_On_BaoVe_ProjectCaNhan.docx / .pdf   tài liệu ôn bảo vệ: giải thích từng phần + câu hỏi thường gặp
     ├── Slide_Tuan2_ProjectCaNhan.pptx
     ├── Slide_Tuan3_ProjectCaNhan.pptx
