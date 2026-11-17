@@ -11,6 +11,22 @@
           "character": 1
         },
         "end": {
+          "line": 90,
+          "character": 2
+        }
+      },
+      "title": "📖 Thao tác chạy: Task 1 – LED1 (dòng 81–90)",
+      "description": "### 📖 Thao tác chạy: Task 1 – LED1\n*📖 Luồng chạy · src/main.cpp, dòng 81–90*\n\n**Khi bắt đầu (chạy 1 lần)**\n1. `last` = tick hiện tại (dòng 82); `half` = 100 ms đổi ra tick (dòng 83); `on` = false (dòng 84).\n\n**Vòng lặp `for (;;)`, mỗi 100 ms**\n2. Đảo `on` (dòng 86).\n3. Ghi `on` ra chân LED1, GPIO4 (dòng 87).\n4. `vTaskDelayUntil(&last, half)` (dòng 88): task chuyển **Blocked** tới đúng mốc `last + 100 ms`, rồi `last` tự cộng thêm 100 ms.\n5. Hết thời gian → **Ready** → được chạy lại bước 2.\n\n**Kết quả:** LED1 sáng 100 ms, tắt 100 ms, chu kỳ 200 ms, không trôi.\n**Tài nguyên dùng chung:** không có."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 81,
+      "selection": {
+        "start": {
+          "line": 81,
+          "character": 1
+        },
+        "end": {
           "line": 81,
           "character": 34
         }
@@ -81,6 +97,22 @@
       },
       "title": "Lệnh FreeRTOS: vTaskDelayUntil (dòng 88)",
       "description": "### vTaskDelayUntil\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 88*\n\nNgủ tới đúng mốc `last + half` rồi cập nhật `last`. Chu kỳ không bị trôi dù thân vòng lặp tốn thời gian. `vTaskDelay` thì tính từ lúc gọi nên sai số cộng dồn."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 109,
+      "selection": {
+        "start": {
+          "line": 109,
+          "character": 1
+        },
+        "end": {
+          "line": 130,
+          "character": 2
+        }
+      },
+      "title": "📖 Thao tác chạy: Task 2 – đọc quang trở (dòng 109–130)",
+      "description": "### 📖 Thao tác chạy: Task 2 – đọc quang trở\n*📖 Luồng chạy · src/main.cpp, dòng 109–130*\n\n**Khi bắt đầu**\n1. `last` = tick hiện tại; `nlog` = 0 (dòng 110–111).\n\n**Vòng lặp, mỗi 500 ms**\n2. Đọc `raw` (0–4095) và `mv` (mV đã hiệu chỉnh) từ GPIO1 (dòng 113–114).\n3. `mv_to_lux(mv)` → `lux` (dòng 115, hàm ở dòng 93–100).\n4. `lux_to_percent(lux)` → `pct` (dòng 116, hàm ở dòng 102–107).\n5. Tăng `nlog`; lần chẵn (mỗi 1 s) gửi một dòng log qua `logf()` (dòng 117–118).\n6. Lấy mutex `g_sensorMutex`, chờ tối đa 50 ms (dòng 120).\n   - Lấy được: ghi `raw`, `lux`, `percent`, tăng `seq` vào `g_sensor`, trả mutex (dòng 121–125).\n   - Không lấy được: bỏ lần ghi này.\n7. Bật bit `EVT_SENSOR_READY` trong `g_sysEvents` (dòng 127).\n8. `vTaskDelayUntil` 500 ms (dòng 128) → **Blocked** → quay lại bước 2.\n\n**Ghi:** `g_sensor` (mutex), bit `EVT_SENSOR_READY`.\n**Gửi:** log vào `g_logQueue`."
     },
     {
       "file": "src/main.cpp",
@@ -187,6 +219,22 @@
           "character": 1
         },
         "end": {
+          "line": 162,
+          "character": 2
+        }
+      },
+      "title": "📖 Thao tác chạy: Task 3 – BTN1 → LED2 (dòng 152–162)",
+      "description": "### 📖 Thao tác chạy: Task 3 – BTN1 → LED2\n*📖 Luồng chạy · src/main.cpp, dòng 152–162*\n\n**Khi bắt đầu**\n1. Tạo `d` (bộ chống dội cho BTN1, GPIO15), coi như đang nhả (dòng 153).\n\n**Vòng lặp, mỗi 10 ms**\n2. `pressed_edge(d)` đọc chân nút (dòng 155, hàm ở dòng 140–149):\n   - Mức đổi → ghi lại thời điểm đổi.\n   - Mức mới giữ đủ 30 ms và là LOW → trả `true` (vừa nhấn), chỉ 1 lần mỗi lần nhấn.\n3. Nếu vừa nhấn:\n   - Đảo `g_led2On` (dòng 156).\n   - Ghi ra LED2, GPIO5 (dòng 157).\n   - Gửi log `\"BTN1 -> LED2 ON/OFF\"` (dòng 158).\n4. `vTaskDelay` 10 ms (dòng 160) → **Blocked** → quay lại bước 2.\n\n**Ghi:** `g_led2On`. **Đọc bởi:** Task 6."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 152,
+      "selection": {
+        "start": {
+          "line": 152,
+          "character": 1
+        },
+        "end": {
           "line": 152,
           "character": 34
         }
@@ -251,6 +299,22 @@
           "character": 1
         },
         "end": {
+          "line": 177,
+          "character": 2
+        }
+      },
+      "title": "📖 Thao tác chạy: Task 4 – BTN2 → semaphore (dòng 165–177)",
+      "description": "### 📖 Thao tác chạy: Task 4 – BTN2 → semaphore\n*📖 Luồng chạy · src/main.cpp, dòng 165–177*\n\n**Khi bắt đầu**\n1. Tạo `d` (bộ chống dội cho BTN2, GPIO16) (dòng 166).\n\n**Vòng lặp, mỗi 10 ms**\n2. `pressed_edge(d)` kiểm tra vừa nhấn chưa (dòng 168).\n3. Nếu vừa nhấn:\n   - `xSemaphoreGive(g_btn2Sem)` → `ok` (dòng 169). Nếu Task 5 đang chờ, Task 5 (prio 4) được chạy ngay, Task 4 tạm dừng tại đây.\n   - Vào critical section, tăng `g_btn2Count`, ra critical section (dòng 170–172).\n   - Gửi log `\"BTN2 give sem: OK\"` hoặc `\"da co san\"` (dòng 173).\n4. `vTaskDelay` 10 ms (dòng 175) → **Blocked** → quay lại bước 2.\n\n**Ghi:** `g_btn2Sem` (give), `g_btn2Count` (critical section)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 165,
+      "selection": {
+        "start": {
+          "line": 165,
+          "character": 1
+        },
+        "end": {
           "line": 165,
           "character": 34
         }
@@ -305,6 +369,22 @@
       },
       "title": "Lệnh FreeRTOS: Critical section (Task 4) (dòng 170–172)",
       "description": "### Critical section (Task 4)\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 170–172*\n\nTăng `g_btn2Count` trong critical section, vì `heartbeat_cb` (dòng 402) cũng đọc biến này."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 180,
+      "selection": {
+        "start": {
+          "line": 180,
+          "character": 1
+        },
+        "end": {
+          "line": 199,
+          "character": 2
+        }
+      },
+      "title": "📖 Thao tác chạy: Task 5 – LED3 sáng 3 s (dòng 180–199)",
+      "description": "### 📖 Thao tác chạy: Task 5 – LED3 sáng 3 s\n*📖 Luồng chạy · src/main.cpp, dòng 180–199*\n\n**Vòng lặp**\n1. `xSemaphoreTake(g_btn2Sem, portMAX_DELAY)` (dòng 182): **Blocked** cho tới khi Task 4 give.\n2. Có tín hiệu → **Running** ngay (prio 4 cao nhất).\n3. `off` = tick hiện tại + 3 000 ms (dòng 183).\n4. Critical section: `g_led3OffTick = off`, `g_led3On = true` (dòng 184–187).\n5. LED3 (GPIO6) lên HIGH, gửi log `\"LED3 ON 3s\"` (dòng 188–189).\n6. `vTaskDelay` 3 000 ms (dòng 191): **Blocked**, các task khác vẫn chạy.\n7. LED3 xuống LOW (dòng 193).\n8. Critical section: `g_led3On = false` (dòng 194–196).\n9. Gửi log `\"LED3 OFF, cho tiep\"` (dòng 197) → quay lại bước 1.\n\n**Nếu semaphore đã có sẵn 1 tín hiệu** (BTN2 được nhấn trong lúc LED3 sáng): bước 1 lấy được ngay, LED3 sáng thêm một lượt 3 s.\n**Ghi:** `g_led3On`, `g_led3OffTick` (critical section). **Đọc bởi:** Task 6."
     },
     {
       "file": "src/main.cpp",
@@ -385,6 +465,22 @@
       },
       "title": "Lệnh FreeRTOS: vTaskDelay(3 000 ms) (dòng 191)",
       "description": "### vTaskDelay(3 000 ms)\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 191*\n\nNgủ 3 s trong khi LED3 sáng. Trong lúc này các task khác, kể cả BTN1, vẫn chạy bình thường."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 272,
+      "selection": {
+        "start": {
+          "line": 272,
+          "character": 1
+        },
+        "end": {
+          "line": 354,
+          "character": 2
+        }
+      },
+      "title": "📖 Thao tác chạy: Task 6 – OLED (dòng 272–354)",
+      "description": "### 📖 Thao tác chạy: Task 6 – OLED\n*📖 Luồng chạy · src/main.cpp, dòng 272–354*\n\n**Khi bắt đầu**\n1. `xEventGroupWaitBits(... EVT_SENSOR_READY ...)` (dòng 274): **Blocked** tới khi Task 2 có dữ liệu lần đầu.\n2. `haveOled` = bit `EVT_OLED_READY` (đã tìm thấy OLED trong `setup()` chưa) (dòng 275).\n3. Khởi tạo các bộ đếm `retry`, `oledFail`, `oledReport`, `oledErr`, mốc `last` (dòng 276–278).\n\n**Vòng lặp, mỗi 500 ms**\n4. Lấy mutex, chép `g_sensor` sang `s`, trả mutex (dòng 282–284). Không lấy được thì `s` = 0.\n5. Critical section: chép `g_led3On` → `led3`, `g_led3OffTick` → `offTick` (dòng 291–294).\n6. LED3 đang sáng → tính `remainMs` = thời gian còn lại (dòng 296–300).\n7. **Có OLED** (dòng 302–335):\n   - Vẽ 5 dòng: tiêu đề, LED2, Light % và lux, LED3 + đếm ngược, raw và số lần đọc; `oled.display()`.\n   - Hỏi OLED còn trả lời (ACK) không. Lỗi 6 lần liên tiếp (3 s) → `haveOled = false`, xoá bit `EVT_OLED_READY`, gửi log.\n   - Mỗi 5 s gửi log số lần lỗi I2C (nếu có).\n8. **Chưa có OLED** (dòng 336–351):\n   - Mỗi 5 s gọi `oled_init(false)` dò lại; thấy thì `haveOled = true`, bật bit, gửi log.\n   - Mỗi 2 s gửi trạng thái ra log thay cho màn hình.\n9. `vTaskDelayUntil` 500 ms (dòng 352) → **Blocked** → quay lại bước 4.\n\n**Đọc:** `g_sensor` (mutex), `g_led3On`/`g_led3OffTick` (critical section), `g_led2On`."
     },
     {
       "file": "src/main.cpp",
@@ -571,6 +667,22 @@
           "character": 1
         },
         "end": {
+          "line": 365,
+          "character": 2
+        }
+      },
+      "title": "📖 Thao tác chạy: Task 7 – logger (dòng 357–365)",
+      "description": "### 📖 Thao tác chạy: Task 7 – logger\n*📖 Luồng chạy · src/main.cpp, dòng 357–365*\n\n**Khi bắt đầu**\n1. Tạo `m` (chỗ chứa một gói log) (dòng 358).\n\n**Vòng lặp**\n2. `xQueueReceive(g_logQueue, &m, portMAX_DELAY)` (dòng 360): **Blocked** cho tới khi queue có gói log.\n3. Có gói → in ra Serial theo dạng `[  thời_gian ms][c số_nhân] nội_dung` (dòng 361–362).\n   - Thời gian = `m.tick` đổi ra ms (lúc task gửi gọi `logf()`).\n   - Số nhân = nhân đang chạy Task 7 (luôn là 0).\n4. Quay lại bước 2. Queue còn gói thì lấy tiếp ngay, hết thì Blocked.\n\n**Đọc:** `g_logQueue`. Là task duy nhất ghi ra Serial."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 357,
+      "selection": {
+        "start": {
+          "line": 357,
+          "character": 1
+        },
+        "end": {
           "line": 357,
           "character": 36
         }
@@ -635,6 +747,22 @@
           "character": 1
         },
         "end": {
+          "line": 372,
+          "character": 2
+        }
+      },
+      "title": "📖 Thao tác chạy: ISR nút BOOT (dòng 368–372)",
+      "description": "### 📖 Thao tác chạy: ISR nút BOOT\n*📖 Luồng chạy · src/main.cpp, dòng 368–372*\n\n**Khi nhấn nút BOOT (GPIO0, cạnh xuống)**\n1. CPU dừng việc đang làm, nhảy vào `isr_boot()` (đặt trong IRAM).\n2. `woken` = pdFALSE (dòng 369).\n3. `vTaskNotifyGiveFromISR(h_monitor, &woken)` (dòng 370): gửi notification cho Task 8; nếu Task 8 có prio cao hơn task vừa bị ngắt thì `woken` = pdTRUE.\n4. `woken` = pdTRUE → `portYIELD_FROM_ISR()` (dòng 371): thoát ngắt là chuyển sang Task 8 luôn.\n5. Thoát ngắt.\n\nKhông in, không chờ, không lấy mutex trong ISR."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 368,
+      "selection": {
+        "start": {
+          "line": 368,
+          "character": 1
+        },
+        "end": {
           "line": 368,
           "character": 33
         }
@@ -683,6 +811,22 @@
           "character": 1
         },
         "end": {
+          "line": 395,
+          "character": 2
+        }
+      },
+      "title": "📖 Thao tác chạy: Task 8 – monitor (dòng 379–395)",
+      "description": "### 📖 Thao tác chạy: Task 8 – monitor\n*📖 Luồng chạy · src/main.cpp, dòng 379–395*\n\n**Vòng lặp**\n1. `ulTaskNotifyTake(pdTRUE, portMAX_DELAY)` (dòng 381): **Blocked** cho tới khi ISR nút BOOT gửi notification.\n2. `vTaskDelay` 50 ms rồi `ulTaskNotifyTake(pdTRUE, 0)` (dòng 382–383): bỏ các notification thừa do nút dội.\n3. Gửi log tổng: số task và heap còn trống (dòng 384–385).\n4. Gọi `print_task()` cho 8 task (dòng 386–393): mỗi task một dòng log gồm priority và stack chưa dùng (high-water mark).\n5. Quay lại bước 1.\n\n**Đọc:** handle `h_led1` … `h_monitor`. Các dòng log đi qua queue như mọi task khác."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 379,
+      "selection": {
+        "start": {
+          "line": 379,
+          "character": 1
+        },
+        "end": {
           "line": 379,
           "character": 37
         }
@@ -721,6 +865,22 @@
       },
       "title": "Lệnh FreeRTOS: Số task và heap (dòng 385)",
       "description": "### Số task và heap\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 385*\n\n`uxTaskGetNumberOfTasks()`: tổng số task trong hệ thống (14 = 8 của bài + Timer Service, 2 Idle, 2 IPC, esp_timer). `ESP.getFreeHeap()`: RAM heap còn trống."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 398,
+      "selection": {
+        "start": {
+          "line": 398,
+          "character": 1
+        },
+        "end": {
+          "line": 407,
+          "character": 2
+        }
+      },
+      "title": "📖 Thao tác chạy: heartbeat (software timer) (dòng 398–407)",
+      "description": "### 📖 Thao tác chạy: heartbeat (software timer)\n*📖 Luồng chạy · src/main.cpp, dòng 398–407*\n\n**Mỗi 5 s**\n1. Timer `g_heartbeat` hết hạn → task Timer Service của FreeRTOS gọi `heartbeat_cb()`.\n2. Critical section: chép `g_btn2Count` → `cnt`, `g_logDropped` → `drop` (dòng 401–404).\n3. Gửi log `\"heartbeat up=…s btn2=… drop=…\"` (dòng 405–406).\n4. Thoát hàm; timer tự lặp lại (auto-reload).\n\nCallback chạy trong task Timer Service nên không được chờ lâu."
     },
     {
       "file": "src/main.cpp",

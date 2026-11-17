@@ -11,6 +11,22 @@
           "character": 1
         },
         "end": {
+          "line": 450,
+          "character": 2
+        }
+      },
+      "title": "📖 Thao tác chạy: setup() – khởi động (dòng 409–450)",
+      "description": "### 📖 Thao tác chạy: setup() – khởi động\n*📖 Luồng chạy · src/main.cpp, dòng 409–450*\n\n**Chạy 1 lần khi cấp điện / reset**\n1. Tăng bộ đệm gửi USB lên 2 048 B, mở Serial 115 200 (dòng 410–414).\n2. Cấu hình chân: LED1–3 OUTPUT; BTN1, BTN2, BOOT INPUT_PULLUP (dòng 415–420).\n3. ADC 12 bit, suy hao 11 dB cho GPIO1 (dòng 421–422).\n4. Tạo đối tượng kernel: binary semaphore (rỗng), mutex, queue 16 gói, event group; thiếu thì dừng (dòng 424–428).\n5. Tắt log I2C của hệ thống; dò OLED, thấy thì bật bit `EVT_OLED_READY` (dòng 430–432).\n6. Tạo 8 task, ghim vào nhân (dòng 435–442). Task có prio cao hơn `setup()` có thể chạy ngay sau khi tạo.\n7. Gắn ngắt cạnh xuống cho nút BOOT (dòng 444).\n8. Tạo và khởi động timer heartbeat 5 s (dòng 446–447).\n9. Gửi log \"Khoi dong xong\" (dòng 449).\n\nSau đó Arduino gọi `loop()` → `vTaskDelete(NULL)`: loopTask tự xoá, chỉ còn các task FreeRTOS chạy."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 409,
+      "selection": {
+        "start": {
+          "line": 409,
+          "character": 1
+        },
+        "end": {
           "line": 409,
           "character": 15
         }
