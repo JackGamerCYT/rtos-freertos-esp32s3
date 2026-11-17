@@ -1,0 +1,390 @@
+{
+  "title": "3. Hàm phụ trợ, tham số và biến cục bộ",
+  "description": "logf, đổi lux, chống dội, dò OLED, print_task.",
+  "steps": [
+    {
+      "file": "src/main.cpp",
+      "line": 66,
+      "selection": {
+        "start": {
+          "line": 66,
+          "character": 1
+        },
+        "end": {
+          "line": 66,
+          "character": 39
+        }
+      },
+      "title": "⭐ Hàm: logf() (dòng 66)",
+      "description": "### ⭐ logf()\n*⚙️ Hàm · src/main.cpp, dòng 66*\n\n> ⭐ **Phần quan trọng.** Mọi log đi qua đây, không task nào bị chặn vì in ấn.\n\nHàm ghi log dùng chung. Không in trực tiếp mà đóng gói thành `LogMsg` rồi gửi vào queue cho Task 7. Không được gọi từ ISR."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 66,
+      "selection": {
+        "start": {
+          "line": 66,
+          "character": 18
+        },
+        "end": {
+          "line": 66,
+          "character": 33
+        }
+      },
+      "title": "Tham số: fmt, ... (tham số của logf) (dòng 66)",
+      "description": "### fmt, ... (tham số của logf)\n*📥 Tham số · src/main.cpp, dòng 66*\n\n| | |\n|---|---|\n| **fmt** | Chuỗi định dạng kiểu printf, ví dụ `\"LED3 ON 3s\"` |\n| **...** | Các giá trị chèn vào chuỗi (số lượng tuỳ ý) |\n"
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 67,
+      "selection": {
+        "start": {
+          "line": 67,
+          "character": 3
+        },
+        "end": {
+          "line": 67,
+          "character": 12
+        }
+      },
+      "title": "Biến cục bộ: m (trong logf) (dòng 67)",
+      "description": "### m (trong logf)\n*📍 Biến cục bộ · src/main.cpp, dòng 67*\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `LogMsg` |\n| **Thuộc** | `logf()` |\n| **Tồn tại** | Tạo khi vào hàm, mất khi hàm kết thúc (nằm trên stack của task) |\n\nGói tin log được dựng trên stack của task gọi, rồi `xQueueSend` chép vào queue."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 69,
+      "selection": {
+        "start": {
+          "line": 69,
+          "character": 3
+        },
+        "end": {
+          "line": 69,
+          "character": 14
+        }
+      },
+      "title": "Biến cục bộ: ap (trong logf) (dòng 69)",
+      "description": "### ap (trong logf)\n*📍 Biến cục bộ · src/main.cpp, dòng 69*\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `va_list` |\n| **Thuộc** | `logf()` |\n| **Tồn tại** | Tạo khi vào hàm, mất khi hàm kết thúc (nằm trên stack của task) |\n\nCon trỏ duyệt danh sách tham số `...`; `va_start` / `va_end` mở và đóng."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 71,
+      "selection": {
+        "start": {
+          "line": 71,
+          "character": 3
+        },
+        "end": {
+          "line": 71,
+          "character": 46
+        }
+      },
+      "title": "Lệnh FreeRTOS: vsnprintf (dòng 71)",
+      "description": "### vsnprintf\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 71*\n\nĐịnh dạng chuỗi giống printf nhưng giới hạn 56 ký tự, không tràn bộ nhớ."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 73,
+      "selection": {
+        "start": {
+          "line": 73,
+          "character": 7
+        },
+        "end": {
+          "line": 73,
+          "character": 36
+        }
+      },
+      "title": "⭐ Lệnh FreeRTOS: xQueueSend(..., 0) (dòng 73)",
+      "description": "### ⭐ xQueueSend(..., 0)\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 73*\n\n> ⭐ **Phần quan trọng.** Timeout 0 nghĩa là không bao giờ chờ.\n\nGửi vào queue với thời gian chờ 0. Queue đầy thì trả về lỗi ngay và tăng `g_logDropped` (dòng 74–76, trong critical section)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 100,
+      "selection": {
+        "start": {
+          "line": 93,
+          "character": 1
+        },
+        "end": {
+          "line": 100,
+          "character": 2
+        }
+      },
+      "title": "Hàm: mv_to_lux() (dòng 93–100)",
+      "description": "### mv_to_lux()\n*⚙️ Hàm · src/main.cpp, dòng 93–100*\n\nĐổi điện áp (mV) ở GPIO1 ra độ rọi (lux).\n\n1. `v` = điện áp (V).\n2. Gần 3,3 V coi như tối hẳn: trả 0.\n3. `r = 2200 · v / (3,3 − v)`: điện trở quang trở từ công thức cầu chia.\n4. `lux = 10 · (RL10 / r)^(1/gamma)`: đặc tuyến GL55xx."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 93,
+      "selection": {
+        "start": {
+          "line": 93,
+          "character": 24
+        },
+        "end": {
+          "line": 93,
+          "character": 38
+        }
+      },
+      "title": "Tham số: mv (tham số) (dòng 93)",
+      "description": "### mv (tham số)\n*📥 Tham số · src/main.cpp, dòng 93*\n\n| | |\n|---|---|\n| **Kiểu** | `uint32_t` |\n| **Ý nghĩa** | Điện áp ở GPIO1, đơn vị mV |\n"
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 95,
+      "selection": {
+        "start": {
+          "line": 95,
+          "character": 3
+        },
+        "end": {
+          "line": 95,
+          "character": 26
+        }
+      },
+      "title": "Biến cục bộ: v (trong mv_to_lux) (dòng 95)",
+      "description": "### v (trong mv_to_lux)\n*📍 Biến cục bộ · src/main.cpp, dòng 95*\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `float` |\n| **Thuộc** | `mv_to_lux()` |\n| **Tồn tại** | Tạo khi vào hàm, mất khi hàm kết thúc (nằm trên stack của task) |\n\nĐiện áp đổi sang volt."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 98,
+      "selection": {
+        "start": {
+          "line": 98,
+          "character": 3
+        },
+        "end": {
+          "line": 98,
+          "character": 24
+        }
+      },
+      "title": "Biến cục bộ: r (trong mv_to_lux) (dòng 98)",
+      "description": "### r (trong mv_to_lux)\n*📍 Biến cục bộ · src/main.cpp, dòng 98*\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `float` |\n| **Thuộc** | `mv_to_lux()` |\n| **Tồn tại** | Tạo khi vào hàm, mất khi hàm kết thúc (nằm trên stack của task) |\n\nĐiện trở quang trở (Ω) tính từ cầu chia."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 107,
+      "selection": {
+        "start": {
+          "line": 102,
+          "character": 1
+        },
+        "end": {
+          "line": 107,
+          "character": 2
+        }
+      },
+      "title": "Hàm: lux_to_percent() (dòng 102–107)",
+      "description": "### lux_to_percent()\n*⚙️ Hàm · src/main.cpp, dòng 102–107*\n\nĐổi lux ra phần trăm theo thang log: `p = log10(lux) / log10(1000) · 100`. 1 lux = 0 %, 10 lux ≈ 33 %, 100 lux ≈ 67 %, 1 000 lux = 100 %. Dùng log vì mắt người cảm nhận độ sáng theo tỉ lệ."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 105,
+      "selection": {
+        "start": {
+          "line": 105,
+          "character": 3
+        },
+        "end": {
+          "line": 105,
+          "character": 24
+        }
+      },
+      "title": "Biến cục bộ: p (trong lux_to_percent) (dòng 105)",
+      "description": "### p (trong lux_to_percent)\n*📍 Biến cục bộ · src/main.cpp, dòng 105*\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `float` |\n| **Thuộc** | `lux_to_percent()` |\n| **Tồn tại** | Tạo khi vào hàm, mất khi hàm kết thúc (nằm trên stack của task) |\n\nPhần trăm trước khi giới hạn tối đa 100 và ép sang `uint8_t`."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 149,
+      "selection": {
+        "start": {
+          "line": 140,
+          "character": 1
+        },
+        "end": {
+          "line": 149,
+          "character": 2
+        }
+      },
+      "title": "⭐ Hàm: pressed_edge() (dòng 140–149)",
+      "description": "### ⭐ pressed_edge()\n*⚙️ Hàm · src/main.cpp, dòng 140–149*\n\n> ⭐ **Phần quan trọng.** Chống dội nút bằng phần mềm.\n\nTrả `true` đúng 1 lần mỗi lần nhấn.\n\n1. Mức đọc khác lần trước → ghi lại thời điểm đổi.\n2. Mức mới giữ đủ 30 ms và khác mức ổn định → cập nhật mức ổn định.\n3. Nếu mức mới là LOW (nút vừa được nhấn) thì trả `true`."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 140,
+      "selection": {
+        "start": {
+          "line": 140,
+          "character": 26
+        },
+        "end": {
+          "line": 140,
+          "character": 38
+        }
+      },
+      "title": "Tham số: d (tham số tham chiếu) (dòng 140)",
+      "description": "### d (tham số tham chiếu)\n*📥 Tham số · src/main.cpp, dòng 140*\n\n| | |\n|---|---|\n| **Kiểu** | `Debounce &` (tham chiếu) |\n| **Ý nghĩa** | Trạng thái chống dội của nút; hàm sửa trực tiếp vào biến của task gọi |\n"
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 141,
+      "selection": {
+        "start": {
+          "line": 141,
+          "character": 3
+        },
+        "end": {
+          "line": 141,
+          "character": 31
+        }
+      },
+      "title": "Biến cục bộ: r (trong pressed_edge) (dòng 141)",
+      "description": "### r (trong pressed_edge)\n*📍 Biến cục bộ · src/main.cpp, dòng 141*\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `bool` |\n| **Thuộc** | `pressed_edge()` |\n| **Tồn tại** | Tạo khi vào hàm, mất khi hàm kết thúc (nằm trên stack của task) |\n\nMức đọc hiện tại của chân nút."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 142,
+      "selection": {
+        "start": {
+          "line": 142,
+          "character": 3
+        },
+        "end": {
+          "line": 142,
+          "character": 40
+        }
+      },
+      "title": "Biến cục bộ: now (trong pressed_edge) (dòng 142)",
+      "description": "### now (trong pressed_edge)\n*📍 Biến cục bộ · src/main.cpp, dòng 142*\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `TickType_t` |\n| **Thuộc** | `pressed_edge()` |\n| **Tồn tại** | Tạo khi vào hàm, mất khi hàm kết thúc (nằm trên stack của task) |\n\nTick hiện tại (1 tick = 1 ms)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 219,
+      "selection": {
+        "start": {
+          "line": 219,
+          "character": 1
+        },
+        "end": {
+          "line": 219,
+          "character": 23
+        }
+      },
+      "title": "Hàm: probe_pair() (dòng 219)",
+      "description": "### probe_pair()\n*⚙️ Hàm · src/main.cpp, dòng 219*\n\nDò OLED trên một cặp chân. Trả 1 = thấy OLED, 0 = không thấy, -1 = chân bị kéo xuống GND."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 219,
+      "selection": {
+        "start": {
+          "line": 219,
+          "character": 23
+        },
+        "end": {
+          "line": 219,
+          "character": 59
+        }
+      },
+      "title": "Tham số: sda, scl, verbose (tham số) (dòng 219)",
+      "description": "### sda, scl, verbose (tham số)\n*📥 Tham số · src/main.cpp, dòng 219*\n\n| | |\n|---|---|\n| **sda, scl** | Cặp chân cần thử |\n| **verbose** | `true` thì in chi tiết ra Serial (lúc khởi động) |\n"
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 224,
+      "selection": {
+        "start": {
+          "line": 224,
+          "character": 3
+        },
+        "end": {
+          "line": 224,
+          "character": 52
+        }
+      },
+      "title": "⭐ Biến cục bộ: ls, lc (trong probe_pair) (dòng 224)",
+      "description": "### ⭐ ls, lc (trong probe_pair)\n*📍 Biến cục bộ · src/main.cpp, dòng 224*\n\n> ⭐ **Phần quan trọng.** Đây là cách phát hiện lỗi GPIO8 bị chập GND.\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `int` |\n| **Thuộc** | `probe_pair()` |\n| **Tồn tại** | Tạo khi vào hàm, mất khi hàm kết thúc (nằm trên stack của task) |\n\nMức của SDA và SCL sau khi bật pull-up. Có pull-up mà vẫn đọc 0 nghĩa là dây đang nối xuống GND → bỏ qua cặp này."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 232,
+      "selection": {
+        "start": {
+          "line": 231,
+          "character": 3
+        },
+        "end": {
+          "line": 232,
+          "character": 22
+        }
+      },
+      "title": "Biến cục bộ: nAck, found (trong probe_pair) (dòng 231–232)",
+      "description": "### nAck, found (trong probe_pair)\n*📍 Biến cục bộ · src/main.cpp, dòng 231–232*\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `int`, `bool` |\n| **Thuộc** | `probe_pair()` |\n| **Tồn tại** | Tạo khi vào hàm, mất khi hàm kết thúc (nằm trên stack của task) |\n\n`nAck` đếm số địa chỉ trả lời. `found` = đã gặp 0x3C/0x3D. Nếu `nAck > 8` (gần như mọi địa chỉ đều trả lời) thì bus hỏng, không tin kết quả (dòng 240)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 233,
+      "selection": {
+        "start": {
+          "line": 233,
+          "character": 8
+        },
+        "end": {
+          "line": 233,
+          "character": 21
+        }
+      },
+      "title": "Biến cục bộ: a (biến vòng lặp quét địa chỉ) (dòng 233)",
+      "description": "### a (biến vòng lặp quét địa chỉ)\n*📍 Biến cục bộ · src/main.cpp, dòng 233*\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `uint8_t` |\n| **Thuộc** | vòng `for` trong `probe_pair()` |\n| **Tồn tại** | Chỉ trong vòng for |\n\nChạy từ 1 đến 126: thử từng địa chỉ I2C."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 245,
+      "selection": {
+        "start": {
+          "line": 245,
+          "character": 1
+        },
+        "end": {
+          "line": 245,
+          "character": 36
+        }
+      },
+      "title": "Hàm: oled_init() (dòng 245)",
+      "description": "### oled_init()\n*⚙️ Hàm · src/main.cpp, dòng 245*\n\nThử lần lượt các cặp chân trong `I2C_TRY`; thấy OLED thì gọi `oled.begin()`. Được gọi trong `setup()` và trong Task 6 (mỗi 5 s khi chưa có màn hình)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 246,
+      "selection": {
+        "start": {
+          "line": 246,
+          "character": 3
+        },
+        "end": {
+          "line": 246,
+          "character": 19
+        }
+      },
+      "title": "Biến cục bộ: ok, pr (trong oled_init) (dòng 246)",
+      "description": "### ok, pr (trong oled_init)\n*📍 Biến cục bộ · src/main.cpp, dòng 246*\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `bool`, `auto &` |\n| **Thuộc** | `oled_init()` |\n| **Tồn tại** | Tạo khi vào hàm, mất khi hàm kết thúc (nằm trên stack của task) |\n\n`ok` = đã tìm thấy OLED. `pr` (dòng 247) = cặp chân đang thử, tham chiếu tới một phần tử của `I2C_TRY`."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 374,
+      "selection": {
+        "start": {
+          "line": 374,
+          "character": 1
+        },
+        "end": {
+          "line": 374,
+          "character": 57
+        }
+      },
+      "title": "Hàm: print_task() (dòng 374)",
+      "description": "### print_task()\n*⚙️ Hàm · src/main.cpp, dòng 374*\n\n| | |\n|---|---|\n| **name** | Tên task để in |\n| **h** | Handle của task |\n\nIn priority (`uxTaskPriorityGet`) và stack chưa bao giờ dùng tới (`uxTaskGetStackHighWaterMark`) của một task."
+    }
+  ]
+}

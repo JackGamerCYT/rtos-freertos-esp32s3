@@ -1,0 +1,310 @@
+{
+  "title": "1. Cấu hình: platformio.ini và config.h",
+  "description": "Cách build, chân GPIO, chu kỳ, priority, stack.",
+  "steps": [
+    {
+      "file": "platformio.ini",
+      "line": 4,
+      "selection": {
+        "start": {
+          "line": 4,
+          "character": 1
+        },
+        "end": {
+          "line": 4,
+          "character": 23
+        }
+      },
+      "title": "Cấu hình: default_envs (dòng 4)",
+      "description": "### default_envs\n*🛠️ Cấu hình · platformio.ini, dòng 4*\n\nMôi trường build mặc định là `esp32s3`. Muốn build cho ESP32 thường thì chọn env `esp32dev` ở thanh trạng thái."
+    },
+    {
+      "file": "platformio.ini",
+      "line": 7,
+      "selection": {
+        "start": {
+          "line": 7,
+          "character": 1
+        },
+        "end": {
+          "line": 7,
+          "character": 10
+        }
+      },
+      "title": "Cấu hình: build_dir (dòng 7)",
+      "description": "### build_dir\n*🛠️ Cấu hình · platformio.ini, dòng 7*\n\nBuild ra `C:\\Users\\<tên>\\.pio_build\\rtos_personal`. Lý do: đường dẫn project có dấu tiếng Việt làm trình biên dịch GCC trên Windows báo lỗi \"Invalid argument\"."
+    },
+    {
+      "file": "platformio.ini",
+      "line": 12,
+      "selection": {
+        "start": {
+          "line": 11,
+          "character": 1
+        },
+        "end": {
+          "line": 12,
+          "character": 20
+        }
+      },
+      "title": "Cấu hình: platform, framework (dòng 11–12)",
+      "description": "### platform, framework\n*🛠️ Cấu hình · platformio.ini, dòng 11–12*\n\npioarduino 55.03.30 = Arduino-ESP32 3.3.0, bên trong là ESP-IDF 5.5. FreeRTOS nằm sẵn trong ESP-IDF, không phải cài thêm. `framework = arduino`: viết code kiểu Arduino (`setup`, `digitalWrite`...)."
+    },
+    {
+      "file": "platformio.ini",
+      "line": 13,
+      "selection": {
+        "start": {
+          "line": 13,
+          "character": 1
+        },
+        "end": {
+          "line": 13,
+          "character": 14
+        }
+      },
+      "title": "Cấu hình: monitor_speed (dòng 13)",
+      "description": "### monitor_speed\n*🛠️ Cấu hình · platformio.ini, dòng 13*\n\nTốc độ Serial Monitor 115 200 baud (khi cắm USB gốc thì thực tế USB CDC không phụ thuộc baud)."
+    },
+    {
+      "file": "platformio.ini",
+      "line": 19,
+      "selection": {
+        "start": {
+          "line": 17,
+          "character": 1
+        },
+        "end": {
+          "line": 19,
+          "character": 44
+        }
+      },
+      "title": "Cấu hình: lib_deps (dòng 17–19)",
+      "description": "### lib_deps\n*🛠️ Cấu hình · platformio.ini, dòng 17–19*\n\nHai thư viện OLED: Adafruit SSD1306 (điều khiển chip màn hình) và Adafruit GFX (vẽ chữ, đường). PlatformIO tự tải khi build."
+    },
+    {
+      "file": "platformio.ini",
+      "line": 26,
+      "selection": {
+        "start": {
+          "line": 26,
+          "character": 34
+        },
+        "end": {
+          "line": 26,
+          "character": 61
+        }
+      },
+      "title": "⭐ Cấu hình: ARDUINO_USB_CDC_ON_BOOT=1 (dòng 26)",
+      "description": "### ⭐ ARDUINO_USB_CDC_ON_BOOT=1\n*🛠️ Cấu hình · platformio.ini, dòng 26*\n\n> ⭐ **Phần quan trọng.** Thiếu cờ này thì cắm cổng USB gốc sẽ không thấy log.\n\nCho `Serial` chạy qua cổng USB gốc của chip ESP32-S3 (USB CDC) thay vì qua chip UART ngoài."
+    },
+    {
+      "file": "platformio.ini",
+      "line": 28,
+      "selection": {
+        "start": {
+          "line": 27,
+          "character": 1
+        },
+        "end": {
+          "line": 28,
+          "character": 20
+        }
+      },
+      "title": "Cấu hình: upload_port, monitor_port (dòng 27–28)",
+      "description": "### upload_port, monitor_port\n*🛠️ Cấu hình · platformio.ini, dòng 27–28*\n\nGhi cố định COM4 cho cả nạp code và Serial Monitor, vì máy có nhiều cổng COM ảo (ELTIMA) làm PlatformIO dò nhầm."
+    },
+    {
+      "file": "include/config.h",
+      "line": 1,
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 1,
+          "character": 13
+        }
+      },
+      "title": "Hằng (#define): #pragma once (dòng 1)",
+      "description": "### #pragma once\n*🔧 Hằng (#define) · include/config.h, dòng 1*\n\nChống include file này hai lần trong cùng một lần biên dịch."
+    },
+    {
+      "file": "include/config.h",
+      "line": 5,
+      "selection": {
+        "start": {
+          "line": 5,
+          "character": 1
+        },
+        "end": {
+          "line": 5,
+          "character": 39
+        }
+      },
+      "title": "Hằng (#define): Chọn bộ chân theo chip (dòng 5)",
+      "description": "### Chọn bộ chân theo chip\n*🔧 Hằng (#define) · include/config.h, dòng 5*\n\n`CONFIG_IDF_TARGET_ESP32S3` do ESP-IDF tự định nghĩa khi build cho ESP32-S3. Khi đó dùng khối chân ngay dưới; còn lại dùng khối `#else` cho ESP32 thường (GPIO 25/26/27/32/33/34/21/22)."
+    },
+    {
+      "file": "include/config.h",
+      "line": 9,
+      "selection": {
+        "start": {
+          "line": 7,
+          "character": 1
+        },
+        "end": {
+          "line": 9,
+          "character": 25
+        }
+      },
+      "title": "Hằng (#define): PIN_LED1, PIN_LED2, PIN_LED3 (dòng 7–9)",
+      "description": "### PIN_LED1, PIN_LED2, PIN_LED3\n*🔧 Hằng (#define) · include/config.h, dòng 7–9*\n\n| | |\n|---|---|\n| **PIN_LED1 = 4** | LED1, Task 1 nháy |\n| **PIN_LED2 = 5** | LED2, Task 3 đảo khi nhấn BTN1 |\n| **PIN_LED3 = 6** | LED3, Task 5 sáng 3 s |\n| **Mạch** | GPIO → điện trở 220 Ω → LED → GND, mức HIGH là sáng |\n"
+    },
+    {
+      "file": "include/config.h",
+      "line": 12,
+      "selection": {
+        "start": {
+          "line": 10,
+          "character": 1
+        },
+        "end": {
+          "line": 12,
+          "character": 86
+        }
+      },
+      "title": "Hằng (#define): PIN_BTN1, PIN_BTN2, PIN_BTN_BOOT (dòng 10–12)",
+      "description": "### PIN_BTN1, PIN_BTN2, PIN_BTN_BOOT\n*🔧 Hằng (#define) · include/config.h, dòng 10–12*\n\n| | |\n|---|---|\n| **PIN_BTN1 = 15** | Nút BTN1 (Task 3) |\n| **PIN_BTN2 = 16** | Nút BTN2 (Task 4) |\n| **PIN_BTN_BOOT = 0** | Nút BOOT có sẵn trên kit, dùng làm ngắt cho Task 8 |\n| **Mạch** | Nút nối thẳng xuống GND, bật `INPUT_PULLUP` nên nhả = HIGH, nhấn = LOW |\n"
+    },
+    {
+      "file": "include/config.h",
+      "line": 13,
+      "selection": {
+        "start": {
+          "line": 13,
+          "character": 1
+        },
+        "end": {
+          "line": 13,
+          "character": 16
+        }
+      },
+      "title": "Hằng (#define): PIN_LDR (dòng 13)",
+      "description": "### PIN_LDR\n*🔧 Hằng (#define) · include/config.h, dòng 13*\n\nGPIO1 (kênh ADC1_CH0) là điểm giữa cầu chia áp: 3V3 → điện trở 2,2 kΩ → GPIO1 → quang trở → GND. Trời càng tối, điện trở quang trở càng lớn nên điện áp ở GPIO1 càng cao."
+    },
+    {
+      "file": "include/config.h",
+      "line": 15,
+      "selection": {
+        "start": {
+          "line": 14,
+          "character": 1
+        },
+        "end": {
+          "line": 15,
+          "character": 84
+        }
+      },
+      "title": "⭐ Hằng (#define): PIN_SDA, PIN_SCL (dòng 14–15)",
+      "description": "### ⭐ PIN_SDA, PIN_SCL\n*🔧 Hằng (#define) · include/config.h, dòng 14–15*\n\n> ⭐ **Phần quan trọng.** Lý do đổi chân là lỗi phần cứng thật đã gặp.\n\nI2C cho OLED ở GPIO10 (SDA) và GPIO11 (SCL). Không dùng GPIO8 mặc định vì trên kit chân này bị kéo xuống GND."
+    },
+    {
+      "file": "include/config.h",
+      "line": 28,
+      "selection": {
+        "start": {
+          "line": 28,
+          "character": 1
+        },
+        "end": {
+          "line": 28,
+          "character": 18
+        }
+      },
+      "title": "Hằng (#define): OLED_ADDR (dòng 28)",
+      "description": "### OLED_ADDR\n*🔧 Hằng (#define) · include/config.h, dòng 28*\n\nĐịa chỉ I2C mặc định của OLED SSD1306 là 0x3C (một số màn là 0x3D, code tự dò)."
+    },
+    {
+      "file": "include/config.h",
+      "line": 34,
+      "selection": {
+        "start": {
+          "line": 31,
+          "character": 1
+        },
+        "end": {
+          "line": 34,
+          "character": 86
+        }
+      },
+      "title": "Hằng (#define): Thông số quang trở (dòng 31–34)",
+      "description": "### Thông số quang trở\n*🔧 Hằng (#define) · include/config.h, dòng 31–34*\n\n| | |\n|---|---|\n| **LDR_R_FIXED = 2200** | Điện trở cố định trong cầu chia (Ω) |\n| **LDR_RL10 = 15000** | Điện trở quang trở ở 10 lux (Ω), loại GL55xx |\n| **LDR_GAMMA = 0.7** | Độ dốc đặc tuyến quang trở |\n| **LUX_FULL = 1000** | Mức lux ứng với 100 % |\n"
+    },
+    {
+      "file": "include/config.h",
+      "line": 43,
+      "selection": {
+        "start": {
+          "line": 37,
+          "character": 1
+        },
+        "end": {
+          "line": 43,
+          "character": 49
+        }
+      },
+      "title": "⭐ Hằng (#define): Chu kỳ các task (ms) (dòng 37–43)",
+      "description": "### ⭐ Chu kỳ các task (ms)\n*🔧 Hằng (#define) · include/config.h, dòng 37–43*\n\n> ⭐ **Phần quan trọng.** Muốn đổi thời gian nào chỉ sửa ở đây.\n\n| | |\n|---|---|\n| **T_LED1_MS = 200** | Chu kỳ nháy LED1 (đảo mỗi 100 ms) |\n| **T_SENSOR_MS = 500** | Task 2 đọc cảm biến |\n| **T_BTN_POLL_MS = 10** | Task 3, 4 quét nút |\n| **T_DEBOUNCE_MS = 30** | Thời gian chống dội |\n| **T_LED3_ON_MS = 3000** | LED3 sáng 3 s |\n| **T_OLED_MS = 500** | Task 6 vẽ OLED |\n| **T_HEARTBEAT_MS = 5000** | Software timer |\n"
+    },
+    {
+      "file": "include/config.h",
+      "line": 53,
+      "selection": {
+        "start": {
+          "line": 46,
+          "character": 1
+        },
+        "end": {
+          "line": 53,
+          "character": 24
+        }
+      },
+      "title": "⭐ Hằng (#define): Priority các task (dòng 46–53)",
+      "description": "### ⭐ Priority các task\n*🔧 Hằng (#define) · include/config.h, dòng 46–53*\n\n> ⭐ **Phần quan trọng.** Thầy hay hỏi vì sao chọn priority như vậy.\n\n| | |\n|---|---|\n| **PRIO_LED3 = 4** | Cao nhất: LED3 bật ngay khi có semaphore |\n| **PRIO_BTN1/BTN2 = 3** | Không bỏ sót lần nhấn |\n| **PRIO_SENSOR = 2, PRIO_MONITOR = 2** | Định kỳ / chỉ chạy khi nhấn BOOT |\n| **PRIO_LED1/OLED/LOGGER = 1** | Chậm vài chục ms không ảnh hưởng |\n| **Quy ước** | Trong FreeRTOS số lớn = ưu tiên cao; idle task = 0 |\n"
+    },
+    {
+      "file": "include/config.h",
+      "line": 58,
+      "selection": {
+        "start": {
+          "line": 56,
+          "character": 1
+        },
+        "end": {
+          "line": 58,
+          "character": 26
+        }
+      },
+      "title": "Hằng (#define): Kích thước stack (dòng 56–58)",
+      "description": "### Kích thước stack\n*🔧 Hằng (#define) · include/config.h, dòng 56–58*\n\n| | |\n|---|---|\n| **STACK_SMALL = 2048** | LED1; sensor/btn1/btn2/led3 dùng 2048 + 1024 = 3072 |\n| **STACK_OLED = 4096** | OLED và monitor (gọi printf, thư viện đồ hoạ) |\n| **STACK_LOG = 3072** | Logger |\n| **Đơn vị** | Trên ESP32 là byte (FreeRTOS gốc là word) |\n"
+    },
+    {
+      "file": "include/config.h",
+      "line": 62,
+      "selection": {
+        "start": {
+          "line": 61,
+          "character": 1
+        },
+        "end": {
+          "line": 62,
+          "character": 35
+        }
+      },
+      "title": "Hằng (#define): Bit của event group (dòng 61–62)",
+      "description": "### Bit của event group\n*🔧 Hằng (#define) · include/config.h, dòng 61–62*\n\n| | |\n|---|---|\n| **EVT_OLED_READY = bit 0** | Đã tìm thấy và khởi tạo OLED |\n| **EVT_SENSOR_READY = bit 1** | Task 2 đã có dữ liệu đầu tiên |\n"
+    }
+  ]
+}
