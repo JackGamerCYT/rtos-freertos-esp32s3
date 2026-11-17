@@ -27,6 +27,7 @@ RTOS_Project/
     ├── Slide_BaoCao_CuoiKy_ProjectCaNhan.pptx   slide báo cáo cuối kỳ (lời thuyết trình trong Notes)
     ├── Slide_FinalReport_PersonalProject_EN.pptx   slide báo cáo cuối kỳ bản tiếng Anh (speaker notes tiếng Anh)
     ├── TaiLieu_On_BaoVe_ProjectCaNhan.docx / .pdf   tài liệu ôn bảo vệ: giải thích từng phần + câu hỏi thường gặp
+    ├── HuongDan_GiaiThichCode_ProjectCaNhan.docx / .pdf   hướng dẫn giải thích code từng bước, ảnh chụp VS Code có đánh số
     ├── Slide_Tuan2_ProjectCaNhan.pptx
     ├── Slide_Tuan3_ProjectCaNhan.pptx
     ├── Slide_Tuan4_ProjectCaNhan.pptx
