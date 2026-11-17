@@ -3,7 +3,8 @@
     // for the documentation about the extensions.json format
     "recommendations": [
         "platformio.platformio-ide",
-        "wokwi.wokwi-vscode"
+        "wokwi.wokwi-vscode",
+        "vsls-contrib.codetour"
     ],
     "unwantedRecommendations": [
         "ms-vscode.cpptools-extension-pack",

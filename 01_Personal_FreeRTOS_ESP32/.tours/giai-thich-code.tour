@@ -1,0 +1,1613 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Giải thích code Project FreeRTOS ESP32-S3",
+  "isPrimary": true,
+  "steps": [
+    {
+      "file": "src/main.cpp",
+      "line": 5,
+      "title": "Tổng quan",
+      "description": "## Tổng quan chương trình\n\n8 task FreeRTOS trên ESP32-S3, giao tiếp qua semaphore, mutex, queue, event group, task notification.\n\n| Task | Hàm | Nhân | Prio |\n|---|---|---|---|\n| 1 LED1 | task1_led1 | 1 | 1 |\n| 2 cảm biến | task2_sensor | 0 | 2 |\n| 3 BTN1 | task3_btn1 | 1 | 3 |\n| 4 BTN2 | task4_btn2 | 1 | 3 |\n| 5 LED3 | task5_led3 | 1 | 4 |\n| 6 OLED | task6_oled | 0 | 1 |\n| 7 logger | task7_logger | 0 | 1 |\n| 8 monitor | task8_monitor | 0 | 2 |\n\nBảng K1–K12 ở đầu file: mỗi dòng là một cơ chế FreeRTOS kèm tên hàm dùng nó."
+    },
+    {
+      "file": "platformio.ini",
+      "line": 4,
+      "selection": {
+        "start": {
+          "line": 4,
+          "character": 1
+        },
+        "end": {
+          "line": 4,
+          "character": 23
+        }
+      },
+      "title": "platformio.ini – cấu hình build (dòng 4)",
+      "description": "### platformio.ini – cấu hình build\n**dòng 4**\n\nMôi trường build mặc định là esp32s3."
+    },
+    {
+      "file": "platformio.ini",
+      "line": 7,
+      "selection": {
+        "start": {
+          "line": 7,
+          "character": 1
+        },
+        "end": {
+          "line": 7,
+          "character": 59
+        }
+      },
+      "title": "platformio.ini – cấu hình build (dòng 7)",
+      "description": "### platformio.ini – cấu hình build\n**dòng 7**\n\nBuild ra thư mục không dấu trong C:\\Users\\<tên>, vì đường dẫn có dấu tiếng Việt làm trình biên dịch báo lỗi."
+    },
+    {
+      "file": "platformio.ini",
+      "line": 12,
+      "selection": {
+        "start": {
+          "line": 11,
+          "character": 1
+        },
+        "end": {
+          "line": 12,
+          "character": 20
+        }
+      },
+      "title": "platformio.ini – cấu hình build (dòng 11–12)",
+      "description": "### platformio.ini – cấu hình build\n**dòng 11–12**\n\nNền tảng pioarduino 55.03.30 = Arduino-ESP32 3.3.0, bên trong là ESP-IDF 5.5 có sẵn FreeRTOS."
+    },
+    {
+      "file": "platformio.ini",
+      "line": 19,
+      "selection": {
+        "start": {
+          "line": 17,
+          "character": 1
+        },
+        "end": {
+          "line": 19,
+          "character": 44
+        }
+      },
+      "title": "platformio.ini – cấu hình build (dòng 17–19)",
+      "description": "### platformio.ini – cấu hình build\n**dòng 17–19**\n\nHai thư viện cho OLED: Adafruit SSD1306 và Adafruit GFX (tự tải khi build)."
+    },
+    {
+      "file": "platformio.ini",
+      "line": 26,
+      "selection": {
+        "start": {
+          "line": 26,
+          "character": 34
+        },
+        "end": {
+          "line": 26,
+          "character": 61
+        }
+      },
+      "title": "platformio.ini – cấu hình build (dòng 26)",
+      "description": "### platformio.ini – cấu hình build\n**dòng 26**\n\nBật Serial qua cổng USB gốc của chip (USB CDC)."
+    },
+    {
+      "file": "platformio.ini",
+      "line": 28,
+      "selection": {
+        "start": {
+          "line": 27,
+          "character": 1
+        },
+        "end": {
+          "line": 28,
+          "character": 20
+        }
+      },
+      "title": "platformio.ini – cấu hình build (dòng 27–28)",
+      "description": "### platformio.ini – cấu hình build\n**dòng 27–28**\n\nGhi cố định cổng COM4 cho nạp code và Serial Monitor, vì máy có nhiều cổng COM ảo."
+    },
+    {
+      "file": "include/config.h",
+      "line": 5,
+      "selection": {
+        "start": {
+          "line": 5,
+          "character": 1
+        },
+        "end": {
+          "line": 5,
+          "character": 39
+        }
+      },
+      "title": "config.h – chân kết nối, quang trở (dòng 5)",
+      "description": "### config.h – chân kết nối, quang trở\n**dòng 5**\n\nChọn bộ chân theo loại chip. Build cho ESP32-S3 thì dùng khối này; ESP32 thường thì dùng khối #else (dòng 17–26, đang mờ)."
+    },
+    {
+      "file": "include/config.h",
+      "line": 9,
+      "selection": {
+        "start": {
+          "line": 7,
+          "character": 1
+        },
+        "end": {
+          "line": 9,
+          "character": 25
+        }
+      },
+      "title": "config.h – chân kết nối, quang trở (dòng 7–9)",
+      "description": "### config.h – chân kết nối, quang trở\n**dòng 7–9**\n\nPIN_LED1/2/3 = GPIO 4, 5, 6: ba LED, mỗi LED qua điện trở 220 Ω xuống GND."
+    },
+    {
+      "file": "include/config.h",
+      "line": 12,
+      "selection": {
+        "start": {
+          "line": 10,
+          "character": 1
+        },
+        "end": {
+          "line": 12,
+          "character": 86
+        }
+      },
+      "title": "config.h – chân kết nối, quang trở (dòng 10–12)",
+      "description": "### config.h – chân kết nối, quang trở\n**dòng 10–12**\n\nPIN_BTN1/2 = GPIO 15, 16: nút nối GND, dùng INPUT_PULLUP nên nhấn = LOW. PIN_BTN_BOOT = GPIO0: nút BOOT có sẵn trên kit, dùng làm ngắt."
+    },
+    {
+      "file": "include/config.h",
+      "line": 13,
+      "selection": {
+        "start": {
+          "line": 13,
+          "character": 1
+        },
+        "end": {
+          "line": 13,
+          "character": 25
+        }
+      },
+      "title": "config.h – chân kết nối, quang trở (dòng 13)",
+      "description": "### config.h – chân kết nối, quang trở\n**dòng 13**\n\nPIN_LDR = GPIO1 (ADC1_CH0): điểm giữa cầu chia áp 3V3 – 2,2 kΩ – GPIO1 – quang trở – GND."
+    },
+    {
+      "file": "include/config.h",
+      "line": 15,
+      "selection": {
+        "start": {
+          "line": 14,
+          "character": 1
+        },
+        "end": {
+          "line": 15,
+          "character": 84
+        }
+      },
+      "title": "config.h – chân kết nối, quang trở (dòng 14–15)",
+      "description": "### config.h – chân kết nối, quang trở\n**dòng 14–15**\n\nPIN_SDA/SCL = GPIO 10, 11: I2C cho OLED. Không dùng GPIO8 vì trên kit chân này bị kéo xuống GND."
+    },
+    {
+      "file": "include/config.h",
+      "line": 34,
+      "selection": {
+        "start": {
+          "line": 31,
+          "character": 1
+        },
+        "end": {
+          "line": 34,
+          "character": 86
+        }
+      },
+      "title": "config.h – chân kết nối, quang trở (dòng 31–34)",
+      "description": "### config.h – chân kết nối, quang trở\n**dòng 31–34**\n\nThông số quang trở: điện trở cố định 2 200 Ω, quang trở 15 kΩ ở 10 lux, hệ số dốc 0,7, mức 1 000 lux ứng với 100 %."
+    },
+    {
+      "file": "include/config.h",
+      "line": 43,
+      "selection": {
+        "start": {
+          "line": 37,
+          "character": 1
+        },
+        "end": {
+          "line": 43,
+          "character": 49
+        }
+      },
+      "title": "config.h – chu kỳ, priority, stack, event bit (dòng 37–43)",
+      "description": "### config.h – chu kỳ, priority, stack, event bit\n**dòng 37–43**\n\nChu kỳ (ms): LED1 200 (đảo mỗi 100), cảm biến 500, quét nút 10, chống dội 30, LED3 sáng 3 000, OLED 500, heartbeat 5 000. Muốn đổi thời gian chỉ sửa ở đây."
+    },
+    {
+      "file": "include/config.h",
+      "line": 53,
+      "selection": {
+        "start": {
+          "line": 46,
+          "character": 1
+        },
+        "end": {
+          "line": 53,
+          "character": 24
+        }
+      },
+      "title": "config.h – chu kỳ, priority, stack, event bit (dòng 46–53)",
+      "description": "### config.h – chu kỳ, priority, stack, event bit\n**dòng 46–53**\n\nPriority: số lớn = ưu tiên cao. LED3 = 4 (cao nhất), BTN1/BTN2 = 3, SENSOR/MONITOR = 2, LED1/OLED/LOGGER = 1."
+    },
+    {
+      "file": "include/config.h",
+      "line": 58,
+      "selection": {
+        "start": {
+          "line": 56,
+          "character": 1
+        },
+        "end": {
+          "line": 58,
+          "character": 26
+        }
+      },
+      "title": "config.h – chu kỳ, priority, stack, event bit (dòng 56–58)",
+      "description": "### config.h – chu kỳ, priority, stack, event bit\n**dòng 56–58**\n\nKích thước stack (byte). Trên ESP32, tham số stack của xTaskCreate tính bằng byte, không phải word."
+    },
+    {
+      "file": "include/config.h",
+      "line": 62,
+      "selection": {
+        "start": {
+          "line": 61,
+          "character": 1
+        },
+        "end": {
+          "line": 62,
+          "character": 35
+        }
+      },
+      "title": "config.h – chu kỳ, priority, stack, event bit (dòng 61–62)",
+      "description": "### config.h – chu kỳ, priority, stack, event bit\n**dòng 61–62**\n\nHai bit của event group: bit 0 = đã có OLED, bit 1 = cảm biến đã có dữ liệu."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 17,
+      "selection": {
+        "start": {
+          "line": 5,
+          "character": 2
+        },
+        "end": {
+          "line": 17,
+          "character": 68
+        }
+      },
+      "title": "main.cpp – phần đầu file (dòng 5–17)",
+      "description": "### main.cpp – phần đầu file\n**dòng 5–17**\n\nBảng “bản đồ kỹ thuật”: K1–K12 là các cơ chế FreeRTOS, kèm tên hàm dùng nó. Tìm [K4], [K5]... trong file là thấy đúng chỗ."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 22,
+      "selection": {
+        "start": {
+          "line": 19,
+          "character": 1
+        },
+        "end": {
+          "line": 22,
+          "character": 30
+        }
+      },
+      "title": "main.cpp – phần đầu file (dòng 19–22)",
+      "description": "### main.cpp – phần đầu file\n**dòng 19–22**\n\nThư viện Arduino, I2C (Wire) và màn hình OLED."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 28,
+      "selection": {
+        "start": {
+          "line": 23,
+          "character": 1
+        },
+        "end": {
+          "line": 28,
+          "character": 29
+        }
+      },
+      "title": "main.cpp – phần đầu file (dòng 23–28)",
+      "description": "### main.cpp – phần đầu file\n**dòng 23–28**\n\nCác header của FreeRTOS: task, semaphore/mutex, queue, event group, software timer."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 29,
+      "selection": {
+        "start": {
+          "line": 29,
+          "character": 1
+        },
+        "end": {
+          "line": 29,
+          "character": 20
+        }
+      },
+      "title": "main.cpp – phần đầu file (dòng 29)",
+      "description": "### main.cpp – phần đầu file\n**dòng 29**\n\nLấy toàn bộ chân, chu kỳ, priority, stack từ config.h."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 38,
+      "selection": {
+        "start": {
+          "line": 33,
+          "character": 1
+        },
+        "end": {
+          "line": 38,
+          "character": 3
+        }
+      },
+      "title": "Biến dùng chung và đối tượng kernel (dòng 33–38)",
+      "description": "### Biến dùng chung và đối tượng kernel\n**dòng 33–38**\n\nstruct SensorData: gói 4 giá trị của cảm biến (raw ADC, lux, %, số lần đọc) thành 1 khối để chép một lần."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 40,
+      "selection": {
+        "start": {
+          "line": 40,
+          "character": 1
+        },
+        "end": {
+          "line": 40,
+          "character": 46
+        }
+      },
+      "title": "Biến dùng chung và đối tượng kernel (dòng 40)",
+      "description": "### Biến dùng chung và đối tượng kernel\n**dòng 40**\n\ng_sensor: biến dùng chung. Task 2 ghi, Task 6 đọc, nên phải bảo vệ bằng mutex."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 45,
+      "selection": {
+        "start": {
+          "line": 41,
+          "character": 1
+        },
+        "end": {
+          "line": 45,
+          "character": 43
+        }
+      },
+      "title": "Biến dùng chung và đối tượng kernel (dòng 41–45)",
+      "description": "### Biến dùng chung và đối tượng kernel\n**dòng 41–45**\n\nCác biến volatile (giá trị có thể bị task khác đổi bất cứ lúc nào): g_led2On (LED2), g_led3On + g_led3OffTick (LED3 đang sáng, tick sẽ tắt), g_btn2Count (số lần nhấn BTN2), g_logDropped (số dòng log bị bỏ)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 47,
+      "selection": {
+        "start": {
+          "line": 47,
+          "character": 1
+        },
+        "end": {
+          "line": 47,
+          "character": 58
+        }
+      },
+      "title": "Biến dùng chung và đối tượng kernel (dòng 47)",
+      "description": "### Biến dùng chung và đối tượng kernel\n**dòng 47**\n\ng_mux: spinlock cho critical section [K9]. ESP32 có 2 nhân nên critical section cần một khoá kiểu này."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 53,
+      "selection": {
+        "start": {
+          "line": 49,
+          "character": 1
+        },
+        "end": {
+          "line": 53,
+          "character": 50
+        }
+      },
+      "title": "Biến dùng chung và đối tượng kernel (dòng 49–53)",
+      "description": "### Biến dùng chung và đối tượng kernel\n**dòng 49–53**\n\nHandle của các đối tượng kernel: g_btn2Sem (binary semaphore), g_sensorMutex (mutex), g_logQueue (queue log), g_sysEvents (event group), g_heartbeat (software timer)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 55,
+      "selection": {
+        "start": {
+          "line": 55,
+          "character": 1
+        },
+        "end": {
+          "line": 55,
+          "character": 91
+        }
+      },
+      "title": "Biến dùng chung và đối tượng kernel (dòng 55)",
+      "description": "### Biến dùng chung và đối tượng kernel\n**dòng 55**\n\nHandle của 8 task, dùng để Task 8 hỏi stack/priority và để ISR đánh thức Task 8."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 57,
+      "selection": {
+        "start": {
+          "line": 57,
+          "character": 1
+        },
+        "end": {
+          "line": 57,
+          "character": 50
+        }
+      },
+      "title": "Biến dùng chung và đối tượng kernel (dòng 57)",
+      "description": "### Biến dùng chung và đối tượng kernel\n**dòng 57**\n\noled: đối tượng màn hình SSD1306 128×64, giao tiếp qua Wire (I2C)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 63,
+      "selection": {
+        "start": {
+          "line": 60,
+          "character": 1
+        },
+        "end": {
+          "line": 63,
+          "character": 3
+        }
+      },
+      "title": "Biến dùng chung và đối tượng kernel (dòng 60–63)",
+      "description": "### Biến dùng chung và đối tượng kernel\n**dòng 60–63**\n\nstruct LogMsg: một phần tử của queue log gồm tick lúc ghi và chuỗi tối đa 56 ký tự."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 66,
+      "selection": {
+        "start": {
+          "line": 66,
+          "character": 1
+        },
+        "end": {
+          "line": 66,
+          "character": 39
+        }
+      },
+      "title": "logf() và Task 1 (LED1) (dòng 66)",
+      "description": "### logf() và Task 1 (LED1)\n**dòng 66**\n\nlogf(): hàm ghi log mà mọi task gọi. Nó KHÔNG in trực tiếp ra Serial mà gửi vào queue."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 68,
+      "selection": {
+        "start": {
+          "line": 68,
+          "character": 3
+        },
+        "end": {
+          "line": 68,
+          "character": 32
+        }
+      },
+      "title": "logf() và Task 1 (LED1) (dòng 68)",
+      "description": "### logf() và Task 1 (LED1)\n**dòng 68**\n\nGhi lại thời điểm (tick) lúc gọi, để log có mốc thời gian chính xác."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 71,
+      "selection": {
+        "start": {
+          "line": 71,
+          "character": 3
+        },
+        "end": {
+          "line": 71,
+          "character": 46
+        }
+      },
+      "title": "logf() và Task 1 (LED1) (dòng 71)",
+      "description": "### logf() và Task 1 (LED1)\n**dòng 71**\n\nvsnprintf: định dạng chuỗi giống printf, giới hạn 56 ký tự nên không tràn bộ nhớ."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 73,
+      "selection": {
+        "start": {
+          "line": 73,
+          "character": 7
+        },
+        "end": {
+          "line": 73,
+          "character": 36
+        }
+      },
+      "title": "logf() và Task 1 (LED1) (dòng 73)",
+      "description": "### logf() và Task 1 (LED1)\n**dòng 73**\n\nGửi vào queue với thời gian chờ 0: queue đầy thì không chờ, task gọi không bao giờ bị chặn."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 76,
+      "selection": {
+        "start": {
+          "line": 74,
+          "character": 5
+        },
+        "end": {
+          "line": 76,
+          "character": 31
+        }
+      },
+      "title": "logf() và Task 1 (LED1) (dòng 74–76)",
+      "description": "### logf() và Task 1 (LED1)\n**dòng 74–76**\n\nQueue đầy thì tăng biến đếm g_logDropped, bọc trong critical section vì nhiều task cùng có thể tăng."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 83,
+      "selection": {
+        "start": {
+          "line": 82,
+          "character": 3
+        },
+        "end": {
+          "line": 83,
+          "character": 56
+        }
+      },
+      "title": "logf() và Task 1 (LED1) (dòng 82–83)",
+      "description": "### logf() và Task 1 (LED1)\n**dòng 82–83**\n\nTask 1: last = mốc thời gian bắt đầu; half = 100 ms (nửa chu kỳ 200 ms) đổi ra tick."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 87,
+      "selection": {
+        "start": {
+          "line": 86,
+          "character": 5
+        },
+        "end": {
+          "line": 87,
+          "character": 32
+        }
+      },
+      "title": "logf() và Task 1 (LED1) (dòng 86–87)",
+      "description": "### logf() và Task 1 (LED1)\n**dòng 86–87**\n\nĐảo trạng thái rồi ghi ra chân LED1."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 88,
+      "selection": {
+        "start": {
+          "line": 88,
+          "character": 5
+        },
+        "end": {
+          "line": 88,
+          "character": 34
+        }
+      },
+      "title": "logf() và Task 1 (LED1) (dòng 88)",
+      "description": "### logf() và Task 1 (LED1)\n**dòng 88**\n\nvTaskDelayUntil [K2]: ngủ tới đúng mốc last + 100 ms nên chu kỳ không bị trôi."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 99,
+      "selection": {
+        "start": {
+          "line": 98,
+          "character": 3
+        },
+        "end": {
+          "line": 99,
+          "character": 91
+        }
+      },
+      "title": "Task 2 – đọc quang trở (dòng 98–99)",
+      "description": "### Task 2 – đọc quang trở\n**dòng 98–99**\n\nmv_to_lux(): từ điện áp tính ra điện trở quang trở (công thức cầu chia), rồi ra lux theo đặc tuyến GL55xx."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 106,
+      "selection": {
+        "start": {
+          "line": 105,
+          "character": 3
+        },
+        "end": {
+          "line": 106,
+          "character": 45
+        }
+      },
+      "title": "Task 2 – đọc quang trở (dòng 105–106)",
+      "description": "### Task 2 – đọc quang trở\n**dòng 105–106**\n\nlux_to_percent(): đổi lux ra % theo thang log (1 lux = 0 %, 1 000 lux = 100 %)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 114,
+      "selection": {
+        "start": {
+          "line": 113,
+          "character": 5
+        },
+        "end": {
+          "line": 114,
+          "character": 88
+        }
+      },
+      "title": "Task 2 – đọc quang trở (dòng 113–114)",
+      "description": "### Task 2 – đọc quang trở\n**dòng 113–114**\n\nĐọc ADC: raw (0–4095) và mV đã hiệu chỉnh theo eFuse của chip."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 118,
+      "selection": {
+        "start": {
+          "line": 117,
+          "character": 5
+        },
+        "end": {
+          "line": 118,
+          "character": 86
+        }
+      },
+      "title": "Task 2 – đọc quang trở (dòng 117–118)",
+      "description": "### Task 2 – đọc quang trở\n**dòng 117–118**\n\nĐọc mỗi 500 ms nhưng chỉ ghi log mỗi lần thứ hai (1 s/lần) cho log gọn."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 120,
+      "selection": {
+        "start": {
+          "line": 120,
+          "character": 9
+        },
+        "end": {
+          "line": 120,
+          "character": 57
+        }
+      },
+      "title": "Task 2 – đọc quang trở (dòng 120)",
+      "description": "### Task 2 – đọc quang trở\n**dòng 120**\n\nLấy mutex [K5], chờ tối đa 50 ms (không chờ mãi nên không deadlock)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 124,
+      "selection": {
+        "start": {
+          "line": 121,
+          "character": 7
+        },
+        "end": {
+          "line": 124,
+          "character": 22
+        }
+      },
+      "title": "Task 2 – đọc quang trở (dòng 121–124)",
+      "description": "### Task 2 – đọc quang trở\n**dòng 121–124**\n\nGhi 4 trường vào g_sensor trong lúc giữ mutex."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 125,
+      "selection": {
+        "start": {
+          "line": 125,
+          "character": 7
+        },
+        "end": {
+          "line": 125,
+          "character": 37
+        }
+      },
+      "title": "Task 2 – đọc quang trở (dòng 125)",
+      "description": "### Task 2 – đọc quang trở\n**dòng 125**\n\nTrả mutex ngay sau khi ghi xong."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 127,
+      "selection": {
+        "start": {
+          "line": 127,
+          "character": 5
+        },
+        "end": {
+          "line": 127,
+          "character": 55
+        }
+      },
+      "title": "Task 2 – đọc quang trở (dòng 127)",
+      "description": "### Task 2 – đọc quang trở\n**dòng 127**\n\nBật bit EVT_SENSOR_READY [K7]: báo cho Task 6 là đã có dữ liệu thật."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 128,
+      "selection": {
+        "start": {
+          "line": 128,
+          "character": 5
+        },
+        "end": {
+          "line": 128,
+          "character": 56
+        }
+      },
+      "title": "Task 2 – đọc quang trở (dòng 128)",
+      "description": "### Task 2 – đọc quang trở\n**dòng 128**\n\nNgủ đến mốc 500 ms tiếp theo."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 138,
+      "selection": {
+        "start": {
+          "line": 133,
+          "character": 1
+        },
+        "end": {
+          "line": 138,
+          "character": 3
+        }
+      },
+      "title": "Chống dội nút và Task 3 (BTN1 → LED2) (dòng 133–138)",
+      "description": "### Chống dội nút và Task 3 (BTN1 → LED2)\n**dòng 133–138**\n\nstruct Debounce: trạng thái chống dội của một nút: chân, mức ổn định, mức đọc lần trước, thời điểm mức đổi."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 143,
+      "selection": {
+        "start": {
+          "line": 143,
+          "character": 3
+        },
+        "end": {
+          "line": 143,
+          "character": 58
+        }
+      },
+      "title": "Chống dội nút và Task 3 (BTN1 → LED2) (dòng 143)",
+      "description": "### Chống dội nút và Task 3 (BTN1 → LED2)\n**dòng 143**\n\nMức đọc khác lần trước thì ghi nhận thời điểm đổi (since)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 146,
+      "selection": {
+        "start": {
+          "line": 144,
+          "character": 3
+        },
+        "end": {
+          "line": 146,
+          "character": 21
+        }
+      },
+      "title": "Chống dội nút và Task 3 (BTN1 → LED2) (dòng 144–146)",
+      "description": "### Chống dội nút và Task 3 (BTN1 → LED2)\n**dòng 144–146**\n\nMức mới giữ đủ 30 ms mới coi là thật. Trả true đúng 1 lần khi chuyển sang LOW (vừa nhấn)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 153,
+      "selection": {
+        "start": {
+          "line": 153,
+          "character": 3
+        },
+        "end": {
+          "line": 153,
+          "character": 42
+        }
+      },
+      "title": "Chống dội nút và Task 3 (BTN1 → LED2) (dòng 153)",
+      "description": "### Chống dội nút và Task 3 (BTN1 → LED2)\n**dòng 153**\n\nTask 3 tạo bộ chống dội cho BTN1, ban đầu coi như đang nhả (HIGH)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 158,
+      "selection": {
+        "start": {
+          "line": 156,
+          "character": 7
+        },
+        "end": {
+          "line": 158,
+          "character": 56
+        }
+      },
+      "title": "Chống dội nút và Task 3 (BTN1 → LED2) (dòng 156–158)",
+      "description": "### Chống dội nút và Task 3 (BTN1 → LED2)\n**dòng 156–158**\n\nCó nhấn thì đảo g_led2On, ghi ra LED2 và gửi log."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 160,
+      "selection": {
+        "start": {
+          "line": 160,
+          "character": 5
+        },
+        "end": {
+          "line": 160,
+          "character": 46
+        }
+      },
+      "title": "Chống dội nút và Task 3 (BTN1 → LED2) (dòng 160)",
+      "description": "### Chống dội nút và Task 3 (BTN1 → LED2)\n**dòng 160**\n\nvTaskDelay 10 ms [K3]: nhường CPU. Thiếu dòng này task priority 3 chạy liên tục, task thấp hơn bị đói CPU, watchdog báo lỗi."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 169,
+      "selection": {
+        "start": {
+          "line": 169,
+          "character": 23
+        },
+        "end": {
+          "line": 169,
+          "character": 49
+        }
+      },
+      "title": "Task 4 → Task 5: binary semaphore, LED3 3 s (dòng 169)",
+      "description": "### Task 4 → Task 5: binary semaphore, LED3 3 s\n**dòng 169**\n\nTask 4 phát tín hiệu [K4]. Nếu semaphore đã có sẵn 1 tín hiệu thì hàm trả pdFALSE."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 172,
+      "selection": {
+        "start": {
+          "line": 170,
+          "character": 7
+        },
+        "end": {
+          "line": 172,
+          "character": 33
+        }
+      },
+      "title": "Task 4 → Task 5: binary semaphore, LED3 3 s (dòng 170–172)",
+      "description": "### Task 4 → Task 5: binary semaphore, LED3 3 s\n**dòng 170–172**\n\nĐếm số lần nhấn BTN2 trong critical section (heartbeat cũng đọc biến này)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 173,
+      "selection": {
+        "start": {
+          "line": 173,
+          "character": 7
+        },
+        "end": {
+          "line": 173,
+          "character": 68
+        }
+      },
+      "title": "Task 4 → Task 5: binary semaphore, LED3 3 s (dòng 173)",
+      "description": "### Task 4 → Task 5: binary semaphore, LED3 3 s\n**dòng 173**\n\nLog \"OK\" nếu phát được, \"da co san\" nếu semaphore đã có tín hiệu từ trước."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 182,
+      "selection": {
+        "start": {
+          "line": 182,
+          "character": 5
+        },
+        "end": {
+          "line": 182,
+          "character": 46
+        }
+      },
+      "title": "Task 4 → Task 5: binary semaphore, LED3 3 s (dòng 182)",
+      "description": "### Task 4 → Task 5: binary semaphore, LED3 3 s\n**dòng 182**\n\nTask 5 chờ semaphore mãi mãi: nằm ở Blocked, không tốn CPU cho tới khi BTN2 được nhấn."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 183,
+      "selection": {
+        "start": {
+          "line": 183,
+          "character": 5
+        },
+        "end": {
+          "line": 183,
+          "character": 72
+        }
+      },
+      "title": "Task 4 → Task 5: binary semaphore, LED3 3 s (dòng 183)",
+      "description": "### Task 4 → Task 5: binary semaphore, LED3 3 s\n**dòng 183**\n\nTính thời điểm sẽ tắt = bây giờ + 3 000 ms (đổi ra tick)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 187,
+      "selection": {
+        "start": {
+          "line": 184,
+          "character": 5
+        },
+        "end": {
+          "line": 187,
+          "character": 31
+        }
+      },
+      "title": "Task 4 → Task 5: binary semaphore, LED3 3 s (dòng 184–187)",
+      "description": "### Task 4 → Task 5: binary semaphore, LED3 3 s\n**dòng 184–187**\n\nCritical section [K9]: cập nhật g_led3OffTick và g_led3On cùng lúc, để Task 6 (ở nhân kia) không đọc được nửa cũ nửa mới."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 189,
+      "selection": {
+        "start": {
+          "line": 188,
+          "character": 5
+        },
+        "end": {
+          "line": 189,
+          "character": 24
+        }
+      },
+      "title": "Task 4 → Task 5: binary semaphore, LED3 3 s (dòng 188–189)",
+      "description": "### Task 4 → Task 5: binary semaphore, LED3 3 s\n**dòng 188–189**\n\nBật LED3 và ghi log."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 191,
+      "selection": {
+        "start": {
+          "line": 191,
+          "character": 5
+        },
+        "end": {
+          "line": 191,
+          "character": 45
+        }
+      },
+      "title": "Task 4 → Task 5: binary semaphore, LED3 3 s (dòng 191)",
+      "description": "### Task 4 → Task 5: binary semaphore, LED3 3 s\n**dòng 191**\n\nNgủ 3 000 ms. Trong lúc này các task khác (kể cả BTN1) vẫn chạy bình thường."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 196,
+      "selection": {
+        "start": {
+          "line": 193,
+          "character": 5
+        },
+        "end": {
+          "line": 196,
+          "character": 31
+        }
+      },
+      "title": "Task 4 → Task 5: binary semaphore, LED3 3 s (dòng 193–196)",
+      "description": "### Task 4 → Task 5: binary semaphore, LED3 3 s\n**dòng 193–196**\n\nTắt LED3, xoá cờ g_led3On rồi quay lại chờ semaphore."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 205,
+      "selection": {
+        "start": {
+          "line": 204,
+          "character": 1
+        },
+        "end": {
+          "line": 205,
+          "character": 49
+        }
+      },
+      "title": "Dò OLED – probe_pair() (dòng 204–205)",
+      "description": "### Dò OLED – probe_pair()\n**dòng 204–205**\n\nĐịa chỉ OLED (0x3C) và cặp chân SDA/SCL đang dùng, sẽ được cập nhật khi dò."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 216,
+      "selection": {
+        "start": {
+          "line": 209,
+          "character": 1
+        },
+        "end": {
+          "line": 216,
+          "character": 3
+        }
+      },
+      "title": "Dò OLED – probe_pair() (dòng 209–216)",
+      "description": "### Dò OLED – probe_pair()\n**dòng 209–216**\n\nI2C_TRY: danh sách cặp chân sẽ thử lần lượt (chân trong config.h, đảo SDA/SCL, rồi 8/9, 17/18, 41/42)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 228,
+      "selection": {
+        "start": {
+          "line": 221,
+          "character": 3
+        },
+        "end": {
+          "line": 228,
+          "character": 4
+        }
+      },
+      "title": "Dò OLED – probe_pair() (dòng 221–228)",
+      "description": "### Dò OLED – probe_pair()\n**dòng 221–228**\n\nBật pull-up rồi đọc chân. Có pull-up mà vẫn đọc 0 nghĩa là chân bị nối xuống GND: bỏ qua cặp này. Đây chính là lỗi GPIO8 gặp trên kit."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 230,
+      "selection": {
+        "start": {
+          "line": 229,
+          "character": 3
+        },
+        "end": {
+          "line": 230,
+          "character": 98
+        }
+      },
+      "title": "Dò OLED – probe_pair() (dòng 229–230)",
+      "description": "### Dò OLED – probe_pair()\n**dòng 229–230**\n\nKhởi động I2C ở 100 kHz (ổn định hơn với dây cắm testboard)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 239,
+      "selection": {
+        "start": {
+          "line": 233,
+          "character": 3
+        },
+        "end": {
+          "line": 239,
+          "character": 4
+        }
+      },
+      "title": "Dò OLED – probe_pair() (dòng 233–239)",
+      "description": "### Dò OLED – probe_pair()\n**dòng 233–239**\n\nQuét địa chỉ 1–126, đếm số thiết bị trả lời (ACK); gặp 0x3C/0x3D là OLED."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 240,
+      "selection": {
+        "start": {
+          "line": 240,
+          "character": 3
+        },
+        "end": {
+          "line": 240,
+          "character": 97
+        }
+      },
+      "title": "Dò OLED – oled_init() (dòng 240)",
+      "description": "### Dò OLED – oled_init()\n**dòng 240**\n\nHơn 8 địa chỉ cùng trả lời là bus hỏng (như lúc cả 126 địa chỉ đều ACK), không tin kết quả."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 249,
+      "selection": {
+        "start": {
+          "line": 247,
+          "character": 3
+        },
+        "end": {
+          "line": 249,
+          "character": 4
+        }
+      },
+      "title": "Dò OLED – oled_init() (dòng 247–249)",
+      "description": "### Dò OLED – oled_init()\n**dòng 247–249**\n\noled_init(): thử lần lượt từng cặp chân cho tới khi thấy OLED."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 256,
+      "selection": {
+        "start": {
+          "line": 256,
+          "character": 7
+        },
+        "end": {
+          "line": 256,
+          "character": 65
+        }
+      },
+      "title": "Dò OLED – oled_init() (dòng 256)",
+      "description": "### Dò OLED – oled_init()\n**dòng 256**\n\nKhởi tạo màn hình tại địa chỉ vừa tìm được."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 263,
+      "selection": {
+        "start": {
+          "line": 260,
+          "character": 3
+        },
+        "end": {
+          "line": 263,
+          "character": 18
+        }
+      },
+      "title": "Dò OLED – oled_init() (dòng 260–263)",
+      "description": "### Dò OLED – oled_init()\n**dòng 260–263**\n\nĐặt màu chữ, xoá màn hình."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 274,
+      "selection": {
+        "start": {
+          "line": 274,
+          "character": 3
+        },
+        "end": {
+          "line": 274,
+          "character": 86
+        }
+      },
+      "title": "Task 6 – lấy dữ liệu (dòng 274)",
+      "description": "### Task 6 – lấy dữ liệu\n**dòng 274**\n\nTask 6 chờ bit EVT_SENSOR_READY [K7] trước khi vẽ lần đầu, nên OLED không hiện số rác."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 275,
+      "selection": {
+        "start": {
+          "line": 275,
+          "character": 3
+        },
+        "end": {
+          "line": 275,
+          "character": 68
+        }
+      },
+      "title": "Task 6 – lấy dữ liệu (dòng 275)",
+      "description": "### Task 6 – lấy dữ liệu\n**dòng 275**\n\nhaveOled: hỏi event group xem lúc khởi động đã tìm thấy OLED chưa."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 287,
+      "selection": {
+        "start": {
+          "line": 282,
+          "character": 5
+        },
+        "end": {
+          "line": 287,
+          "character": 6
+        }
+      },
+      "title": "Task 6 – lấy dữ liệu (dòng 282–287)",
+      "description": "### Task 6 – lấy dữ liệu\n**dòng 282–287**\n\nChép g_sensor sang biến cục bộ s trong lúc giữ mutex, rồi trả mutex ngay. Phần vẽ chậm nằm ngoài mutex."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 294,
+      "selection": {
+        "start": {
+          "line": 291,
+          "character": 5
+        },
+        "end": {
+          "line": 294,
+          "character": 31
+        }
+      },
+      "title": "Task 6 – lấy dữ liệu (dòng 291–294)",
+      "description": "### Task 6 – lấy dữ liệu\n**dòng 291–294**\n\nĐọc 2 biến của LED3 trong critical section (cặp với dòng 184–187 ở Task 5)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 300,
+      "selection": {
+        "start": {
+          "line": 296,
+          "character": 5
+        },
+        "end": {
+          "line": 300,
+          "character": 6
+        }
+      },
+      "title": "Task 6 – lấy dữ liệu (dòng 296–300)",
+      "description": "### Task 6 – lấy dữ liệu\n**dòng 296–300**\n\nTính thời gian còn lại của LED3 để hiển thị đếm ngược."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 317,
+      "selection": {
+        "start": {
+          "line": 303,
+          "character": 7
+        },
+        "end": {
+          "line": 317,
+          "character": 64
+        }
+      },
+      "title": "Task 6 – vẽ OLED (dòng 303–317)",
+      "description": "### Task 6 – vẽ OLED\n**dòng 303–317**\n\nVẽ 5 dòng lên OLED: tiêu đề, LED2, độ sáng, LED3 (có đếm ngược), raw/số lần đọc."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 318,
+      "selection": {
+        "start": {
+          "line": 318,
+          "character": 7
+        },
+        "end": {
+          "line": 318,
+          "character": 22
+        }
+      },
+      "title": "Task 6 – vẽ OLED (dòng 318)",
+      "description": "### Task 6 – vẽ OLED\n**dòng 318**\n\nĐẩy hình ra màn hình."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 320,
+      "selection": {
+        "start": {
+          "line": 319,
+          "character": 7
+        },
+        "end": {
+          "line": 320,
+          "character": 41
+        }
+      },
+      "title": "Task 6 – vẽ OLED (dòng 319–320)",
+      "description": "### Task 6 – vẽ OLED\n**dòng 319–320**\n\nHỏi OLED còn trả lời không (ACK)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 326,
+      "selection": {
+        "start": {
+          "line": 322,
+          "character": 9
+        },
+        "end": {
+          "line": 326,
+          "character": 77
+        }
+      },
+      "title": "Task 6 – vẽ OLED (dòng 322–326)",
+      "description": "### Task 6 – vẽ OLED\n**dòng 322–326**\n\nLỗi 6 lần liên tiếp (3 s) thì coi như mất màn hình: xoá bit EVT_OLED_READY và chuyển sang chế độ dò lại."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 343,
+      "selection": {
+        "start": {
+          "line": 337,
+          "character": 7
+        },
+        "end": {
+          "line": 343,
+          "character": 10
+        }
+      },
+      "title": "Task 6 (cuối) và Task 7 logger (dòng 337–343)",
+      "description": "### Task 6 (cuối) và Task 7 logger\n**dòng 337–343**\n\nChưa có OLED: cứ 5 s thử dò lại. Cắm lại dây là màn hình lên, không cần reset."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 349,
+      "selection": {
+        "start": {
+          "line": 346,
+          "character": 7
+        },
+        "end": {
+          "line": 349,
+          "character": 55
+        }
+      },
+      "title": "Task 6 (cuối) và Task 7 logger (dòng 346–349)",
+      "description": "### Task 6 (cuối) và Task 7 logger\n**dòng 346–349**\n\nKhông có OLED thì in trạng thái ra Serial mỗi 2 s thay cho màn hình."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 352,
+      "selection": {
+        "start": {
+          "line": 352,
+          "character": 5
+        },
+        "end": {
+          "line": 352,
+          "character": 54
+        }
+      },
+      "title": "Task 6 (cuối) và Task 7 logger (dòng 352)",
+      "description": "### Task 6 (cuối) và Task 7 logger\n**dòng 352**\n\nNgủ đến mốc 500 ms tiếp theo."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 360,
+      "selection": {
+        "start": {
+          "line": 360,
+          "character": 9
+        },
+        "end": {
+          "line": 360,
+          "character": 53
+        }
+      },
+      "title": "Task 6 (cuối) và Task 7 logger (dòng 360)",
+      "description": "### Task 6 (cuối) và Task 7 logger\n**dòng 360**\n\nTask 7 (logger): chờ queue mãi mãi; có tin là thức dậy. Đây là task DUY NHẤT được in ra Serial (gatekeeper)."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 362,
+      "selection": {
+        "start": {
+          "line": 361,
+          "character": 7
+        },
+        "end": {
+          "line": 362,
+          "character": 93
+        }
+      },
+      "title": "Task 6 (cuối) và Task 7 logger (dòng 361–362)",
+      "description": "### Task 6 (cuối) và Task 7 logger\n**dòng 361–362**\n\nIn dòng log kèm mốc thời gian (ms) và số hiệu nhân đang chạy."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 368,
+      "selection": {
+        "start": {
+          "line": 368,
+          "character": 1
+        },
+        "end": {
+          "line": 368,
+          "character": 33
+        }
+      },
+      "title": "ISR nút BOOT và Task 8 monitor (dòng 368)",
+      "description": "### ISR nút BOOT và Task 8 monitor\n**dòng 368**\n\nISR của nút BOOT. IRAM_ATTR: đặt hàm trong RAM trong để chạy nhanh, kể cả lúc đang ghi flash."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 370,
+      "selection": {
+        "start": {
+          "line": 370,
+          "character": 3
+        },
+        "end": {
+          "line": 370,
+          "character": 45
+        }
+      },
+      "title": "ISR nút BOOT và Task 8 monitor (dòng 370)",
+      "description": "### ISR nút BOOT và Task 8 monitor\n**dòng 370**\n\n[K8] ISR chỉ “gõ cửa” Task 8 bằng task notification. Hàm trong ISR phải có đuôi FromISR."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 371,
+      "selection": {
+        "start": {
+          "line": 371,
+          "character": 3
+        },
+        "end": {
+          "line": 371,
+          "character": 35
+        }
+      },
+      "title": "ISR nút BOOT và Task 8 monitor (dòng 371)",
+      "description": "### ISR nút BOOT và Task 8 monitor\n**dòng 371**\n\nNếu vừa đánh thức task priority cao hơn thì chuyển ngữ cảnh ngay khi thoát ngắt."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 376,
+      "selection": {
+        "start": {
+          "line": 375,
+          "character": 3
+        },
+        "end": {
+          "line": 376,
+          "character": 50
+        }
+      },
+      "title": "ISR nút BOOT và Task 8 monitor (dòng 375–376)",
+      "description": "### ISR nút BOOT và Task 8 monitor\n**dòng 375–376**\n\nprint_task(): in priority và stack chưa dùng tới (high-water mark) của một task [K11]."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 381,
+      "selection": {
+        "start": {
+          "line": 381,
+          "character": 5
+        },
+        "end": {
+          "line": 381,
+          "character": 45
+        }
+      },
+      "title": "ISR nút BOOT và Task 8 monitor (dòng 381)",
+      "description": "### ISR nút BOOT và Task 8 monitor\n**dòng 381**\n\nTask 8 chờ notification từ ISR, không tốn CPU khi chưa nhấn BOOT."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 383,
+      "selection": {
+        "start": {
+          "line": 382,
+          "character": 5
+        },
+        "end": {
+          "line": 383,
+          "character": 33
+        }
+      },
+      "title": "ISR nút BOOT và Task 8 monitor (dòng 382–383)",
+      "description": "### ISR nút BOOT và Task 8 monitor\n**dòng 382–383**\n\nChờ 50 ms rồi xoá các notification dư do nút dội."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 393,
+      "selection": {
+        "start": {
+          "line": 384,
+          "character": 5
+        },
+        "end": {
+          "line": 393,
+          "character": 38
+        }
+      },
+      "title": "ISR nút BOOT và Task 8 monitor (dòng 384–393)",
+      "description": "### ISR nút BOOT và Task 8 monitor\n**dòng 384–393**\n\nIn số task, heap còn trống, rồi từng task."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 406,
+      "selection": {
+        "start": {
+          "line": 402,
+          "character": 3
+        },
+        "end": {
+          "line": 406,
+          "character": 49
+        }
+      },
+      "title": "Heartbeat timer và setup() (dòng 402–406)",
+      "description": "### Heartbeat timer và setup()\n**dòng 402–406**\n\nheartbeat_cb(): callback của software timer [K10], chạy trong task Timer Service mỗi 5 s; đọc 2 bộ đếm trong critical section rồi ghi log. Không được chờ lâu."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 413,
+      "selection": {
+        "start": {
+          "line": 410,
+          "character": 1
+        },
+        "end": {
+          "line": 413,
+          "character": 7
+        }
+      },
+      "title": "Heartbeat timer và setup() (dòng 410–413)",
+      "description": "### Heartbeat timer và setup()\n**dòng 410–413**\n\nsetup(): tăng bộ đệm gửi USB lên 2 048 B để in bảng dài không rơi chữ."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 420,
+      "selection": {
+        "start": {
+          "line": 415,
+          "character": 3
+        },
+        "end": {
+          "line": 420,
+          "character": 39
+        }
+      },
+      "title": "Heartbeat timer và setup() (dòng 415–420)",
+      "description": "### Heartbeat timer và setup()\n**dòng 415–420**\n\nCấu hình chân: 3 LED là OUTPUT, 3 nút là INPUT_PULLUP."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 422,
+      "selection": {
+        "start": {
+          "line": 421,
+          "character": 3
+        },
+        "end": {
+          "line": 422,
+          "character": 70
+        }
+      },
+      "title": "Heartbeat timer và setup() (dòng 421–422)",
+      "description": "### Heartbeat timer và setup()\n**dòng 421–422**\n\nADC 12 bit, suy hao 11 dB để đo được tới khoảng 3,3 V."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 428,
+      "selection": {
+        "start": {
+          "line": 424,
+          "character": 3
+        },
+        "end": {
+          "line": 428,
+          "character": 73
+        }
+      },
+      "title": "Heartbeat timer và setup() (dòng 424–428)",
+      "description": "### Heartbeat timer và setup()\n**dòng 424–428**\n\nTạo semaphore (rỗng), mutex, queue 16 phần tử, event group; configASSERT dừng chương trình nếu thiếu RAM."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 432,
+      "selection": {
+        "start": {
+          "line": 431,
+          "character": 3
+        },
+        "end": {
+          "line": 432,
+          "character": 90
+        }
+      },
+      "title": "Heartbeat timer và setup() (dòng 431–432)",
+      "description": "### Heartbeat timer và setup()\n**dòng 431–432**\n\nDò và khởi tạo OLED; thấy thì bật bit EVT_OLED_READY."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 441,
+      "selection": {
+        "start": {
+          "line": 435,
+          "character": 3
+        },
+        "end": {
+          "line": 441,
+          "character": 101
+        }
+      },
+      "title": "Heartbeat timer và setup() (dòng 435–441)",
+      "description": "### Heartbeat timer và setup()\n**dòng 435–441**\n\n[K1] Tạo task và ghim vào nhân: (hàm, tên, stack, tham số, priority, handle, nhân). Nhân 1: led1, btn1, btn2, led3. Nhân 0: logger, sensor, oled, monitor."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 444,
+      "selection": {
+        "start": {
+          "line": 444,
+          "character": 3
+        },
+        "end": {
+          "line": 444,
+          "character": 75
+        }
+      },
+      "title": "Gắn ngắt, timer, loop() (dòng 444)",
+      "description": "### Gắn ngắt, timer, loop()\n**dòng 444**\n\nGắn ngắt cạnh xuống (FALLING) cho nút BOOT, gọi isr_boot."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 447,
+      "selection": {
+        "start": {
+          "line": 446,
+          "character": 3
+        },
+        "end": {
+          "line": 447,
+          "character": 31
+        }
+      },
+      "title": "Gắn ngắt, timer, loop() (dòng 446–447)",
+      "description": "### Gắn ngắt, timer, loop()\n**dòng 446–447**\n\nTạo software timer “hb” chu kỳ 5 s, tự lặp (pdTRUE), rồi khởi động."
+    },
+    {
+      "file": "src/main.cpp",
+      "line": 454,
+      "selection": {
+        "start": {
+          "line": 454,
+          "character": 3
+        },
+        "end": {
+          "line": 454,
+          "character": 21
+        }
+      },
+      "title": "Gắn ngắt, timer, loop() (dòng 454)",
+      "description": "### Gắn ngắt, timer, loop()\n**dòng 454**\n\n[K12] loop() tự xoá chính nó (loopTask của Arduino) để trả RAM; từ đây FreeRTOS quản lý hết."
+    }
+  ]
+}
