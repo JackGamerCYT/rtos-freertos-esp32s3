@@ -1,6 +1,6 @@
 {
   "title": "2. Biến toàn cục và đối tượng kernel",
-  "description": "Mọi biến toàn cục: kiểu, ai ghi, ai đọc, bảo vệ bằng gì.",
+  "description": "⭐ = biến toàn cục · ✴️ = đối tượng kernel",
   "steps": [
     {
       "file": "src/main.cpp",
@@ -32,7 +32,7 @@
         }
       },
       "title": "⭐ Biến toàn cục: g_sensor (dòng 40)",
-      "description": "### ⭐ g_sensor\n*🌐 Biến toàn cục · src/main.cpp, dòng 40*\n\n> ⭐ **Phần quan trọng.** Ví dụ chính của mutex.\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `SensorData` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | Task 2 (dòng 121–124) |\n| **Ai đọc** | Task 6 (dòng 283) |\n| **Bảo vệ** | Mutex `g_sensorMutex` |\n"
+      "description": "### ⭐ g_sensor\n*⭐ Biến toàn cục · src/main.cpp, dòng 40*\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `SensorData` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | Task 2 (dòng 121–124) |\n| **Ai đọc** | Task 6 (dòng 283) |\n| **Bảo vệ** | Mutex `g_sensorMutex` |\n"
     },
     {
       "file": "src/main.cpp",
@@ -47,8 +47,8 @@
           "character": 30
         }
       },
-      "title": "Biến toàn cục: g_led2On (dòng 41)",
-      "description": "### g_led2On\n*🌐 Biến toàn cục · src/main.cpp, dòng 41*\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `volatile bool` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | Task 3 (dòng 156) |\n| **Ai đọc** | Task 3, Task 6 (dòng 310, 348) |\n| **Bảo vệ** | Không cần khoá: bool 1 byte đọc/ghi nguyên tử, chỉ 1 task ghi |\n\nTrạng thái LED2. `volatile` báo cho trình biên dịch: biến có thể bị task khác đổi bất cứ lúc nào, phải đọc lại từ RAM mỗi lần."
+      "title": "⭐ Biến toàn cục: g_led2On (dòng 41)",
+      "description": "### ⭐ g_led2On\n*⭐ Biến toàn cục · src/main.cpp, dòng 41*\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `volatile bool` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | Task 3 (dòng 156) |\n| **Ai đọc** | Task 3, Task 6 (dòng 310, 348) |\n| **Bảo vệ** | Không cần khoá: bool 1 byte đọc/ghi nguyên tử, chỉ 1 task ghi |\n\nTrạng thái LED2. `volatile` báo cho trình biên dịch: biến có thể bị task khác đổi bất cứ lúc nào, phải đọc lại từ RAM mỗi lần."
     },
     {
       "file": "src/main.cpp",
@@ -64,7 +64,7 @@
         }
       },
       "title": "⭐ Biến toàn cục: g_led3On (dòng 42)",
-      "description": "### ⭐ g_led3On\n*🌐 Biến toàn cục · src/main.cpp, dòng 42*\n\n> ⭐ **Phần quan trọng.** Đi cặp với g_led3OffTick, ví dụ của critical section.\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `volatile bool` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | Task 5 (dòng 186, 195) |\n| **Ai đọc** | Task 6 (dòng 292) |\n| **Bảo vệ** | Critical section `g_mux` |\n\nLED3 đang sáng hay không."
+      "description": "### ⭐ g_led3On\n*⭐ Biến toàn cục · src/main.cpp, dòng 42*\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `volatile bool` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | Task 5 (dòng 186, 195) |\n| **Ai đọc** | Task 6 (dòng 292) |\n| **Bảo vệ** | Critical section `g_mux` |\n\nLED3 đang sáng hay không."
     },
     {
       "file": "src/main.cpp",
@@ -80,7 +80,7 @@
         }
       },
       "title": "⭐ Biến toàn cục: g_led3OffTick (dòng 43)",
-      "description": "### ⭐ g_led3OffTick\n*🌐 Biến toàn cục · src/main.cpp, dòng 43*\n\n> ⭐ **Phần quan trọng.** Đi cặp với g_led3On.\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `volatile TickType_t` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | Task 5 (dòng 185) |\n| **Ai đọc** | Task 6 (dòng 293) |\n| **Bảo vệ** | Critical section `g_mux` |\n\nTick mà LED3 sẽ tắt. Task 6 lấy giá trị này trừ tick hiện tại để hiển thị đếm ngược. Hai biến LED3 phải đổi cùng lúc nên được bọc chung một critical section."
+      "description": "### ⭐ g_led3OffTick\n*⭐ Biến toàn cục · src/main.cpp, dòng 43*\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `volatile TickType_t` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | Task 5 (dòng 185) |\n| **Ai đọc** | Task 6 (dòng 293) |\n| **Bảo vệ** | Critical section `g_mux` |\n\nTick mà LED3 sẽ tắt. Task 6 lấy giá trị này trừ tick hiện tại để hiển thị đếm ngược. Hai biến LED3 phải đổi cùng lúc nên được bọc chung một critical section."
     },
     {
       "file": "src/main.cpp",
@@ -95,8 +95,8 @@
           "character": 37
         }
       },
-      "title": "Biến toàn cục: g_btn2Count (dòng 44)",
-      "description": "### g_btn2Count\n*🌐 Biến toàn cục · src/main.cpp, dòng 44*\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `volatile uint32_t` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | Task 4 (dòng 171) |\n| **Ai đọc** | heartbeat_cb (dòng 402) |\n| **Bảo vệ** | Critical section `g_mux` |\n\nĐếm tổng số lần nhấn BTN2, in ra trong dòng heartbeat."
+      "title": "⭐ Biến toàn cục: g_btn2Count (dòng 44)",
+      "description": "### ⭐ g_btn2Count\n*⭐ Biến toàn cục · src/main.cpp, dòng 44*\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `volatile uint32_t` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | Task 4 (dòng 171) |\n| **Ai đọc** | heartbeat_cb (dòng 402) |\n| **Bảo vệ** | Critical section `g_mux` |\n\nĐếm tổng số lần nhấn BTN2, in ra trong dòng heartbeat."
     },
     {
       "file": "src/main.cpp",
@@ -111,8 +111,8 @@
           "character": 38
         }
       },
-      "title": "Biến toàn cục: g_logDropped (dòng 45)",
-      "description": "### g_logDropped\n*🌐 Biến toàn cục · src/main.cpp, dòng 45*\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `volatile uint32_t` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | `logf()` – mọi task (dòng 75) |\n| **Ai đọc** | heartbeat_cb (dòng 403) |\n| **Bảo vệ** | Critical section `g_mux` |\n\nSố dòng log bị bỏ vì queue đầy. Kết quả đo thực tế = 0."
+      "title": "⭐ Biến toàn cục: g_logDropped (dòng 45)",
+      "description": "### ⭐ g_logDropped\n*⭐ Biến toàn cục · src/main.cpp, dòng 45*\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `volatile uint32_t` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | `logf()` – mọi task (dòng 75) |\n| **Ai đọc** | heartbeat_cb (dòng 403) |\n| **Bảo vệ** | Critical section `g_mux` |\n\nSố dòng log bị bỏ vì queue đầy. Kết quả đo thực tế = 0."
     },
     {
       "file": "src/main.cpp",
@@ -127,8 +127,8 @@
           "character": 26
         }
       },
-      "title": "⭐ Đối tượng kernel: g_mux (dòng 47)",
-      "description": "### ⭐ g_mux\n*🧩 Đối tượng kernel · src/main.cpp, dòng 47*\n\n> ⭐ **Phần quan trọng.** Câu hỏi hay gặp: critical section trên ESP32 2 nhân khác gì 1 nhân.\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục, khoá spinlock |\n| **Dùng bởi** | `portENTER_CRITICAL(&g_mux)` / `portEXIT_CRITICAL(&g_mux)` |\n| **Bảo vệ** | g_led3On, g_led3OffTick, g_btn2Count, g_logDropped |\n\nVào critical section: tắt ngắt trên nhân hiện tại và giữ spinlock để nhân kia phải đứng chờ. Bên trong chỉ để vài phép gán, ra càng nhanh càng tốt."
+      "title": "✴️ Đối tượng kernel: g_mux (dòng 47)",
+      "description": "### ✴️ g_mux\n*✴️ Đối tượng kernel · src/main.cpp, dòng 47*\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục, khoá spinlock |\n| **Dùng bởi** | `portENTER_CRITICAL(&g_mux)` / `portEXIT_CRITICAL(&g_mux)` |\n| **Bảo vệ** | g_led3On, g_led3OffTick, g_btn2Count, g_logDropped |\n\nVào critical section: tắt ngắt trên nhân hiện tại và giữ spinlock để nhân kia phải đứng chờ. Bên trong chỉ để vài phép gán, ra càng nhanh càng tốt."
     },
     {
       "file": "src/main.cpp",
@@ -143,8 +143,8 @@
           "character": 36
         }
       },
-      "title": "⭐ Đối tượng kernel: g_btn2Sem (binary semaphore) (dòng 49)",
-      "description": "### ⭐ g_btn2Sem (binary semaphore)\n*🧩 Đối tượng kernel · src/main.cpp, dòng 49*\n\n> ⭐ **Phần quan trọng.** Phần chính của đề (Task 4 → Task 5).\n\n| | |\n|---|---|\n| **Tạo ở** | `setup()` dòng 424: `xSemaphoreCreateBinary()`, ban đầu rỗng |\n| **Give** | Task 4 (dòng 169) |\n| **Take** | Task 5 (dòng 182), chờ `portMAX_DELAY` |\n| **Đặc điểm** | Giữ tối đa 1 tín hiệu |\n"
+      "title": "✴️ Đối tượng kernel: g_btn2Sem (binary semaphore) (dòng 49)",
+      "description": "### ✴️ g_btn2Sem (binary semaphore)\n*✴️ Đối tượng kernel · src/main.cpp, dòng 49*\n\n| | |\n|---|---|\n| **Tạo ở** | `setup()` dòng 424: `xSemaphoreCreateBinary()`, ban đầu rỗng |\n| **Give** | Task 4 (dòng 169) |\n| **Take** | Task 5 (dòng 182), chờ `portMAX_DELAY` |\n| **Đặc điểm** | Giữ tối đa 1 tín hiệu |\n"
     },
     {
       "file": "src/main.cpp",
@@ -159,8 +159,8 @@
           "character": 40
         }
       },
-      "title": "⭐ Đối tượng kernel: g_sensorMutex (mutex) (dòng 50)",
-      "description": "### ⭐ g_sensorMutex (mutex)\n*🧩 Đối tượng kernel · src/main.cpp, dòng 50*\n\n> ⭐ **Phần quan trọng.** Mutex có kế thừa priority, khác binary semaphore.\n\n| | |\n|---|---|\n| **Tạo ở** | `setup()` dòng 425: `xSemaphoreCreateMutex()` |\n| **Lấy/trả** | Task 2 (dòng 120/125), Task 6 (dòng 282/284) |\n| **Thời gian chờ** | 50 ms, quá hạn thì bỏ lần đó (không deadlock) |\n| **Đặc điểm** | Có chủ sở hữu và kế thừa priority |\n"
+      "title": "✴️ Đối tượng kernel: g_sensorMutex (mutex) (dòng 50)",
+      "description": "### ✴️ g_sensorMutex (mutex)\n*✴️ Đối tượng kernel · src/main.cpp, dòng 50*\n\n| | |\n|---|---|\n| **Tạo ở** | `setup()` dòng 425: `xSemaphoreCreateMutex()` |\n| **Lấy/trả** | Task 2 (dòng 120/125), Task 6 (dòng 282/284) |\n| **Thời gian chờ** | 50 ms, quá hạn thì bỏ lần đó (không deadlock) |\n| **Đặc điểm** | Có chủ sở hữu và kế thừa priority |\n"
     },
     {
       "file": "src/main.cpp",
@@ -175,8 +175,8 @@
           "character": 37
         }
       },
-      "title": "⭐ Đối tượng kernel: g_logQueue (queue) (dòng 51)",
-      "description": "### ⭐ g_logQueue (queue)\n*🧩 Đối tượng kernel · src/main.cpp, dòng 51*\n\n> ⭐ **Phần quan trọng.** Mô hình gatekeeper task.\n\n| | |\n|---|---|\n| **Tạo ở** | `setup()` dòng 426: 16 phần tử kiểu `LogMsg` |\n| **Gửi** | `logf()` – mọi task, timeout 0 |\n| **Nhận** | Task 7 (dòng 360), chờ `portMAX_DELAY` |\n"
+      "title": "✴️ Đối tượng kernel: g_logQueue (queue) (dòng 51)",
+      "description": "### ✴️ g_logQueue (queue)\n*✴️ Đối tượng kernel · src/main.cpp, dòng 51*\n\n| | |\n|---|---|\n| **Tạo ở** | `setup()` dòng 426: 16 phần tử kiểu `LogMsg` |\n| **Gửi** | `logf()` – mọi task, timeout 0 |\n| **Nhận** | Task 7 (dòng 360), chờ `portMAX_DELAY` |\n"
     },
     {
       "file": "src/main.cpp",
@@ -191,8 +191,8 @@
           "character": 38
         }
       },
-      "title": "Đối tượng kernel: g_sysEvents (event group) (dòng 52)",
-      "description": "### g_sysEvents (event group)\n*🧩 Đối tượng kernel · src/main.cpp, dòng 52*\n\n| | |\n|---|---|\n| **Tạo ở** | `setup()` dòng 427 |\n| **Bit** | `EVT_OLED_READY` (bit 0), `EVT_SENSOR_READY` (bit 1) |\n| **Set** | Task 2 (dòng 127), setup/Task 6 (OLED) |\n| **Chờ** | Task 6 (dòng 274) |\n"
+      "title": "✴️ Đối tượng kernel: g_sysEvents (event group) (dòng 52)",
+      "description": "### ✴️ g_sysEvents (event group)\n*✴️ Đối tượng kernel · src/main.cpp, dòng 52*\n\n| | |\n|---|---|\n| **Tạo ở** | `setup()` dòng 427 |\n| **Bit** | `EVT_OLED_READY` (bit 0), `EVT_SENSOR_READY` (bit 1) |\n| **Set** | Task 2 (dòng 127), setup/Task 6 (OLED) |\n| **Chờ** | Task 6 (dòng 274) |\n"
     },
     {
       "file": "src/main.cpp",
@@ -207,8 +207,8 @@
           "character": 38
         }
       },
-      "title": "Đối tượng kernel: g_heartbeat (software timer) (dòng 53)",
-      "description": "### g_heartbeat (software timer)\n*🧩 Đối tượng kernel · src/main.cpp, dòng 53*\n\n| | |\n|---|---|\n| **Tạo ở** | `setup()` dòng 446, chu kỳ 5 s, tự lặp |\n| **Callback** | `heartbeat_cb()` chạy trong task Timer Service |\n"
+      "title": "✴️ Đối tượng kernel: g_heartbeat (software timer) (dòng 53)",
+      "description": "### ✴️ g_heartbeat (software timer)\n*✴️ Đối tượng kernel · src/main.cpp, dòng 53*\n\n| | |\n|---|---|\n| **Tạo ở** | `setup()` dòng 446, chu kỳ 5 s, tự lặp |\n| **Callback** | `heartbeat_cb()` chạy trong task Timer Service |\n"
     },
     {
       "file": "src/main.cpp",
@@ -223,8 +223,8 @@
           "character": 27
         }
       },
-      "title": "Biến toàn cục: h_led1 … h_monitor (handle của task) (dòng 55)",
-      "description": "### h_led1 … h_monitor (handle của task)\n*🌐 Biến toàn cục · src/main.cpp, dòng 55*\n\n| | |\n|---|---|\n| **Kiểu** | `TaskHandle_t`, mỗi task một handle |\n| **Gán ở** | `xTaskCreatePinnedToCore` (dòng 435–442) |\n| **Dùng bởi** | ISR đánh thức Task 8 qua `h_monitor`; Task 8 hỏi stack/priority từng task |\n"
+      "title": "⭐ Biến toàn cục: h_led1 … h_monitor (handle của task) (dòng 55)",
+      "description": "### ⭐ h_led1 … h_monitor (handle của task)\n*⭐ Biến toàn cục · src/main.cpp, dòng 55*\n\n| | |\n|---|---|\n| **Kiểu** | `TaskHandle_t`, mỗi task một handle |\n| **Gán ở** | `xTaskCreatePinnedToCore` (dòng 435–442) |\n| **Dùng bởi** | ISR đánh thức Task 8 qua `h_monitor`; Task 8 hỏi stack/priority từng task |\n"
     },
     {
       "file": "src/main.cpp",
@@ -239,8 +239,8 @@
           "character": 29
         }
       },
-      "title": "Biến toàn cục: oled (đối tượng màn hình) (dòng 57)",
-      "description": "### oled (đối tượng màn hình)\n*🌐 Biến toàn cục · src/main.cpp, dòng 57*\n\n| | |\n|---|---|\n| **Kiểu** | `Adafruit_SSD1306` |\n| **Tham số** | 128×64 điểm, bus `Wire` (I2C), không dùng chân reset (-1) |\n| **Dùng bởi** | `oled_init()`, Task 6 |\n"
+      "title": "⭐ Biến toàn cục: oled (đối tượng màn hình) (dòng 57)",
+      "description": "### ⭐ oled (đối tượng màn hình)\n*⭐ Biến toàn cục · src/main.cpp, dòng 57*\n\n| | |\n|---|---|\n| **Kiểu** | `Adafruit_SSD1306` |\n| **Tham số** | 128×64 điểm, bus `Wire` (I2C), không dùng chân reset (-1) |\n| **Dùng bởi** | `oled_init()`, Task 6 |\n"
     },
     {
       "file": "src/main.cpp",
@@ -287,8 +287,8 @@
           "character": 26
         }
       },
-      "title": "Biến toàn cục: g_oledAddr (dòng 204)",
-      "description": "### g_oledAddr\n*🌐 Biến toàn cục · src/main.cpp, dòng 204*\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `uint8_t` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | `probe_pair()` khi tìm thấy OLED |\n| **Ai đọc** | `oled_init()`, Task 6 |\n| **Bảo vệ** | Không cần: chỉ thay đổi lúc dò OLED |\n"
+      "title": "⭐ Biến toàn cục: g_oledAddr (dòng 204)",
+      "description": "### ⭐ g_oledAddr\n*⭐ Biến toàn cục · src/main.cpp, dòng 204*\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `uint8_t` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | `probe_pair()` khi tìm thấy OLED |\n| **Ai đọc** | `oled_init()`, Task 6 |\n| **Bảo vệ** | Không cần: chỉ thay đổi lúc dò OLED |\n"
     },
     {
       "file": "src/main.cpp",
@@ -303,8 +303,8 @@
           "character": 21
         }
       },
-      "title": "Biến toàn cục: g_sda, g_scl (dòng 205)",
-      "description": "### g_sda, g_scl\n*🌐 Biến toàn cục · src/main.cpp, dòng 205*\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `int8_t` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | `oled_init()` (dòng 248) |\n| **Ai đọc** | `oled_init()`, Task 6 (log) |\n| **Bảo vệ** | Không cần |\n\nCặp chân I2C thực sự đang dùng sau khi dò (mặc định lấy từ config.h)."
+      "title": "⭐ Biến toàn cục: g_sda, g_scl (dòng 205)",
+      "description": "### ⭐ g_sda, g_scl\n*⭐ Biến toàn cục · src/main.cpp, dòng 205*\n\n| | |\n|---|---|\n| **Loại** | Biến toàn cục `static` (chỉ dùng trong main.cpp) |\n| **Kiểu** | `int8_t` |\n| **Tồn tại** | Suốt chương trình |\n| **Ai ghi** | `oled_init()` (dòng 248) |\n| **Ai đọc** | `oled_init()`, Task 6 (log) |\n| **Bảo vệ** | Không cần |\n\nCặp chân I2C thực sự đang dùng sau khi dò (mặc định lấy từ config.h)."
     },
     {
       "file": "src/main.cpp",
@@ -319,8 +319,8 @@
           "character": 3
         }
       },
-      "title": "Biến toàn cục: I2C_TRY (hằng mảng) (dòng 209–216)",
-      "description": "### I2C_TRY (hằng mảng)\n*🌐 Biến toàn cục · src/main.cpp, dòng 209–216*\n\n| | |\n|---|---|\n| **Kiểu** | Mảng hằng `int8_t [][2]`, nằm trong flash |\n| **Nội dung** | {10,11}, {11,10}, {8,9}, {17,18}, {41,42} |\n| **Dùng bởi** | `oled_init()` thử lần lượt |\n"
+      "title": "⭐ Biến toàn cục: I2C_TRY (hằng mảng) (dòng 209–216)",
+      "description": "### ⭐ I2C_TRY (hằng mảng)\n*⭐ Biến toàn cục · src/main.cpp, dòng 209–216*\n\n| | |\n|---|---|\n| **Kiểu** | Mảng hằng `int8_t [][2]`, nằm trong flash |\n| **Nội dung** | {10,11}, {11,10}, {8,9}, {17,18}, {41,42} |\n| **Dùng bởi** | `oled_init()` thử lần lượt |\n"
     }
   ]
 }

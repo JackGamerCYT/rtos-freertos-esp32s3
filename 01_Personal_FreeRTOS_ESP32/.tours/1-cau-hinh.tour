@@ -95,8 +95,8 @@
           "character": 61
         }
       },
-      "title": "⭐ Cấu hình: ARDUINO_USB_CDC_ON_BOOT=1 (dòng 26)",
-      "description": "### ⭐ ARDUINO_USB_CDC_ON_BOOT=1\n*🛠️ Cấu hình · platformio.ini, dòng 26*\n\n> ⭐ **Phần quan trọng.** Thiếu cờ này thì cắm cổng USB gốc sẽ không thấy log.\n\nCho `Serial` chạy qua cổng USB gốc của chip ESP32-S3 (USB CDC) thay vì qua chip UART ngoài."
+      "title": "Cấu hình: ARDUINO_USB_CDC_ON_BOOT=1 (dòng 26)",
+      "description": "### ARDUINO_USB_CDC_ON_BOOT=1\n*🛠️ Cấu hình · platformio.ini, dòng 26*\n\nCho `Serial` chạy qua cổng USB gốc của chip ESP32-S3 (USB CDC) thay vì qua chip UART ngoài."
     },
     {
       "file": "platformio.ini",
@@ -207,8 +207,8 @@
           "character": 84
         }
       },
-      "title": "⭐ Hằng (#define): PIN_SDA, PIN_SCL (dòng 14–15)",
-      "description": "### ⭐ PIN_SDA, PIN_SCL\n*🔧 Hằng (#define) · include/config.h, dòng 14–15*\n\n> ⭐ **Phần quan trọng.** Lý do đổi chân là lỗi phần cứng thật đã gặp.\n\nI2C cho OLED ở GPIO10 (SDA) và GPIO11 (SCL). Không dùng GPIO8 mặc định vì trên kit chân này bị kéo xuống GND."
+      "title": "Hằng (#define): PIN_SDA, PIN_SCL (dòng 14–15)",
+      "description": "### PIN_SDA, PIN_SCL\n*🔧 Hằng (#define) · include/config.h, dòng 14–15*\n\nI2C cho OLED ở GPIO10 (SDA) và GPIO11 (SCL). Không dùng GPIO8 mặc định vì trên kit chân này bị kéo xuống GND."
     },
     {
       "file": "include/config.h",
@@ -255,8 +255,8 @@
           "character": 49
         }
       },
-      "title": "⭐ Hằng (#define): Chu kỳ các task (ms) (dòng 37–43)",
-      "description": "### ⭐ Chu kỳ các task (ms)\n*🔧 Hằng (#define) · include/config.h, dòng 37–43*\n\n> ⭐ **Phần quan trọng.** Muốn đổi thời gian nào chỉ sửa ở đây.\n\n| | |\n|---|---|\n| **T_LED1_MS = 200** | Chu kỳ nháy LED1 (đảo mỗi 100 ms) |\n| **T_SENSOR_MS = 500** | Task 2 đọc cảm biến |\n| **T_BTN_POLL_MS = 10** | Task 3, 4 quét nút |\n| **T_DEBOUNCE_MS = 30** | Thời gian chống dội |\n| **T_LED3_ON_MS = 3000** | LED3 sáng 3 s |\n| **T_OLED_MS = 500** | Task 6 vẽ OLED |\n| **T_HEARTBEAT_MS = 5000** | Software timer |\n"
+      "title": "Hằng (#define): Chu kỳ các task (ms) (dòng 37–43)",
+      "description": "### Chu kỳ các task (ms)\n*🔧 Hằng (#define) · include/config.h, dòng 37–43*\n\n| | |\n|---|---|\n| **T_LED1_MS = 200** | Chu kỳ nháy LED1 (đảo mỗi 100 ms) |\n| **T_SENSOR_MS = 500** | Task 2 đọc cảm biến |\n| **T_BTN_POLL_MS = 10** | Task 3, 4 quét nút |\n| **T_DEBOUNCE_MS = 30** | Thời gian chống dội |\n| **T_LED3_ON_MS = 3000** | LED3 sáng 3 s |\n| **T_OLED_MS = 500** | Task 6 vẽ OLED |\n| **T_HEARTBEAT_MS = 5000** | Software timer |\n"
     },
     {
       "file": "include/config.h",
@@ -271,8 +271,8 @@
           "character": 24
         }
       },
-      "title": "⭐ Hằng (#define): Priority các task (dòng 46–53)",
-      "description": "### ⭐ Priority các task\n*🔧 Hằng (#define) · include/config.h, dòng 46–53*\n\n> ⭐ **Phần quan trọng.** Thầy hay hỏi vì sao chọn priority như vậy.\n\n| | |\n|---|---|\n| **PRIO_LED3 = 4** | Cao nhất: LED3 bật ngay khi có semaphore |\n| **PRIO_BTN1/BTN2 = 3** | Không bỏ sót lần nhấn |\n| **PRIO_SENSOR = 2, PRIO_MONITOR = 2** | Định kỳ / chỉ chạy khi nhấn BOOT |\n| **PRIO_LED1/OLED/LOGGER = 1** | Chậm vài chục ms không ảnh hưởng |\n| **Quy ước** | Trong FreeRTOS số lớn = ưu tiên cao; idle task = 0 |\n"
+      "title": "Hằng (#define): Priority các task (dòng 46–53)",
+      "description": "### Priority các task\n*🔧 Hằng (#define) · include/config.h, dòng 46–53*\n\n| | |\n|---|---|\n| **PRIO_LED3 = 4** | Cao nhất: LED3 bật ngay khi có semaphore |\n| **PRIO_BTN1/BTN2 = 3** | Không bỏ sót lần nhấn |\n| **PRIO_SENSOR = 2, PRIO_MONITOR = 2** | Định kỳ / chỉ chạy khi nhấn BOOT |\n| **PRIO_LED1/OLED/LOGGER = 1** | Chậm vài chục ms không ảnh hưởng |\n| **Quy ước** | Trong FreeRTOS số lớn = ưu tiên cao; idle task = 0 |\n"
     },
     {
       "file": "include/config.h",

@@ -79,8 +79,8 @@
           "character": 34
         }
       },
-      "title": "⭐ Lệnh FreeRTOS: vTaskDelayUntil (dòng 88)",
-      "description": "### ⭐ vTaskDelayUntil\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 88*\n\n> ⭐ **Phần quan trọng.** Phân biệt với vTaskDelay.\n\nNgủ tới đúng mốc `last + half` rồi cập nhật `last`. Chu kỳ không bị trôi dù thân vòng lặp tốn thời gian. `vTaskDelay` thì tính từ lúc gọi nên sai số cộng dồn."
+      "title": "Lệnh FreeRTOS: vTaskDelayUntil (dòng 88)",
+      "description": "### vTaskDelayUntil\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 88*\n\nNgủ tới đúng mốc `last + half` rồi cập nhật `last`. Chu kỳ không bị trôi dù thân vòng lặp tốn thời gian. `vTaskDelay` thì tính từ lúc gọi nên sai số cộng dồn."
     },
     {
       "file": "src/main.cpp",
@@ -159,8 +159,8 @@
           "character": 57
         }
       },
-      "title": "⭐ Lệnh FreeRTOS: Lấy mutex (Task 2) (dòng 120)",
-      "description": "### ⭐ Lấy mutex (Task 2)\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 120*\n\n> ⭐ **Phần quan trọng.** Cặp take/give phải ngắn và luôn đi đôi.\n\nChờ mutex tối đa 50 ms. Lấy được thì ghi 4 trường của `g_sensor` rồi `xSemaphoreGive` trả ngay (dòng 125). Không lấy được thì bỏ lần ghi này."
+      "title": "Lệnh FreeRTOS: Lấy mutex (Task 2) (dòng 120)",
+      "description": "### Lấy mutex (Task 2)\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 120*\n\nChờ mutex tối đa 50 ms. Lấy được thì ghi 4 trường của `g_sensor` rồi `xSemaphoreGive` trả ngay (dòng 125). Không lấy được thì bỏ lần ghi này."
     },
     {
       "file": "src/main.cpp",
@@ -239,8 +239,8 @@
           "character": 46
         }
       },
-      "title": "⭐ Lệnh FreeRTOS: vTaskDelay(10 ms) – Task 3 (dòng 160)",
-      "description": "### ⭐ vTaskDelay(10 ms) – Task 3\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 160*\n\n> ⭐ **Phần quan trọng.** Thiếu dòng này thì task thấp hơn bị đói CPU.\n\nNhường CPU 10 ms. Task priority 3 mà không bao giờ chờ thì task priority 1–2 trên cùng nhân không được chạy, idle task không chạy, watchdog báo lỗi."
+      "title": "Lệnh FreeRTOS: vTaskDelay(10 ms) – Task 3 (dòng 160)",
+      "description": "### vTaskDelay(10 ms) – Task 3\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 160*\n\nNhường CPU 10 ms. Task priority 3 mà không bao giờ chờ thì task priority 1–2 trên cùng nhân không được chạy, idle task không chạy, watchdog báo lỗi."
     },
     {
       "file": "src/main.cpp",
@@ -287,8 +287,8 @@
           "character": 49
         }
       },
-      "title": "⭐ Biến cục bộ: ok (Task 4) (dòng 169)",
-      "description": "### ⭐ ok (Task 4)\n*📍 Biến cục bộ · src/main.cpp, dòng 169*\n\n> ⭐ **Phần quan trọng.** Kết quả give cho biết semaphore đã đầy hay chưa.\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `BaseType_t` |\n| **Thuộc** | Task 4 (trong khối if) |\n| **Tồn tại** | Chỉ trong khối if |\n\n`pdTRUE` = phát tín hiệu thành công. `pdFALSE` = semaphore đã có sẵn 1 tín hiệu (binary chỉ giữ 1) → log \"da co san\"."
+      "title": "Biến cục bộ: ok (Task 4) (dòng 169)",
+      "description": "### ok (Task 4)\n*📍 Biến cục bộ · src/main.cpp, dòng 169*\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `BaseType_t` |\n| **Thuộc** | Task 4 (trong khối if) |\n| **Tồn tại** | Chỉ trong khối if |\n\n`pdTRUE` = phát tín hiệu thành công. `pdFALSE` = semaphore đã có sẵn 1 tín hiệu (binary chỉ giữ 1) → log \"da co san\"."
     },
     {
       "file": "src/main.cpp",
@@ -319,8 +319,8 @@
           "character": 34
         }
       },
-      "title": "⭐ Task: Task 5 – task5_led3 (dòng 180)",
-      "description": "### ⭐ Task 5 – task5_led3\n*🔁 Task · src/main.cpp, dòng 180*\n\n> ⭐ **Phần quan trọng.** Phần chính của đề.\n\n| | |\n|---|---|\n| **Chức năng** | Nhận semaphore → LED3 sáng 3 s |\n| **Nhân / Prio / Stack** | 1 / 4 (cao nhất) / 3 072 B |\n| **Chờ bằng** | `xSemaphoreTake(portMAX_DELAY)` rồi `vTaskDelay` 3 000 ms |\n"
+      "title": "Task: Task 5 – task5_led3 (dòng 180)",
+      "description": "### Task 5 – task5_led3\n*🔁 Task · src/main.cpp, dòng 180*\n\n| | |\n|---|---|\n| **Chức năng** | Nhận semaphore → LED3 sáng 3 s |\n| **Nhân / Prio / Stack** | 1 / 4 (cao nhất) / 3 072 B |\n| **Chờ bằng** | `xSemaphoreTake(portMAX_DELAY)` rồi `vTaskDelay` 3 000 ms |\n"
     },
     {
       "file": "src/main.cpp",
@@ -335,8 +335,8 @@
           "character": 46
         }
       },
-      "title": "⭐ Lệnh FreeRTOS: xSemaphoreTake(portMAX_DELAY) (dòng 182)",
-      "description": "### ⭐ xSemaphoreTake(portMAX_DELAY)\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 182*\n\n> ⭐ **Phần quan trọng.** Task nằm Blocked, không tốn CPU.\n\nChờ không giới hạn. Khi Task 4 give, Task 5 (prio 4 > 3) chiếm CPU ngay, nên trong log \"LED3 ON\" in trước \"BTN2 give sem: OK\" cùng một mốc ms."
+      "title": "Lệnh FreeRTOS: xSemaphoreTake(portMAX_DELAY) (dòng 182)",
+      "description": "### xSemaphoreTake(portMAX_DELAY)\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 182*\n\nChờ không giới hạn. Khi Task 4 give, Task 5 (prio 4 > 3) chiếm CPU ngay, nên trong log \"LED3 ON\" in trước \"BTN2 give sem: OK\" cùng một mốc ms."
     },
     {
       "file": "src/main.cpp",
@@ -367,8 +367,8 @@
           "character": 31
         }
       },
-      "title": "⭐ Lệnh FreeRTOS: Critical section (Task 5) (dòng 184–187)",
-      "description": "### ⭐ Critical section (Task 5)\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 184–187*\n\n> ⭐ **Phần quan trọng.** Hai biến phải đổi cùng lúc.\n\nGhi `g_led3OffTick` và `g_led3On` liền nhau trong critical section. Task 6 ở nhân 0 đọc cặp này (dòng 291–294) nên không bao giờ thấy nửa cũ nửa mới."
+      "title": "Lệnh FreeRTOS: Critical section (Task 5) (dòng 184–187)",
+      "description": "### Critical section (Task 5)\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 184–187*\n\nGhi `g_led3OffTick` và `g_led3On` liền nhau trong critical section. Task 6 ở nhân 0 đọc cặp này (dòng 291–294) nên không bao giờ thấy nửa cũ nửa mới."
     },
     {
       "file": "src/main.cpp",
@@ -415,8 +415,8 @@
           "character": 52
         }
       },
-      "title": "⭐ Lệnh FreeRTOS: xEventGroupWaitBits (dòng 274)",
-      "description": "### ⭐ xEventGroupWaitBits\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 274*\n\n> ⭐ **Phần quan trọng.** Ví dụ dùng event group.\n\nChờ bit `EVT_SENSOR_READY` (không xoá bit, chờ đủ bit, chờ mãi) trước khi vẽ lần đầu, nên OLED không hiện số rác."
+      "title": "Lệnh FreeRTOS: xEventGroupWaitBits (dòng 274)",
+      "description": "### xEventGroupWaitBits\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 274*\n\nChờ bit `EVT_SENSOR_READY` (không xoá bit, chờ đủ bit, chờ mãi) trước khi vẽ lần đầu, nên OLED không hiện số rác."
     },
     {
       "file": "src/main.cpp",
@@ -495,8 +495,8 @@
           "character": 18
         }
       },
-      "title": "⭐ Biến cục bộ: s (Task 6) (dòng 281)",
-      "description": "### ⭐ s (Task 6)\n*📍 Biến cục bộ · src/main.cpp, dòng 281*\n\n> ⭐ **Phần quan trọng.** Chép ra biến cục bộ để giữ mutex ngắn nhất.\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `SensorData` |\n| **Thuộc** | Task 6 (mỗi vòng lặp) |\n| **Tồn tại** | Một vòng lặp |\n\nBản sao của `g_sensor`. Chép xong trả mutex ngay (dòng 282–287), phần vẽ chậm dùng `s` nên không cần giữ mutex."
+      "title": "Biến cục bộ: s (Task 6) (dòng 281)",
+      "description": "### s (Task 6)\n*📍 Biến cục bộ · src/main.cpp, dòng 281*\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `SensorData` |\n| **Thuộc** | Task 6 (mỗi vòng lặp) |\n| **Tồn tại** | Một vòng lặp |\n\nBản sao của `g_sensor`. Chép xong trả mutex ngay (dòng 282–287), phần vẽ chậm dùng `s` nên không cần giữ mutex."
     },
     {
       "file": "src/main.cpp",
@@ -559,8 +559,8 @@
           "character": 28
         }
       },
-      "title": "⭐ Biến cục bộ static: n (static, Task 6) (dòng 345)",
-      "description": "### ⭐ n (static, Task 6)\n*📍 Biến cục bộ static · src/main.cpp, dòng 345*\n\n> ⭐ **Phần quan trọng.** Biến cục bộ nhưng có từ khoá static: giá trị được giữ giữa các vòng.\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ `static` |\n| **Kiểu** | `uint8_t` |\n| **Tồn tại** | Suốt chương trình (nằm trong RAM tĩnh, không trên stack), chỉ thấy được trong khối này |\n\nĐếm vòng khi không có OLED; đủ 4 vòng (2 s) thì in trạng thái ra Serial thay cho màn hình."
+      "title": "Biến cục bộ static: n (static, Task 6) (dòng 345)",
+      "description": "### n (static, Task 6)\n*📍 Biến cục bộ static · src/main.cpp, dòng 345*\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ `static` |\n| **Kiểu** | `uint8_t` |\n| **Tồn tại** | Suốt chương trình (nằm trong RAM tĩnh, không trên stack), chỉ thấy được trong khối này |\n\nĐếm vòng khi không có OLED; đủ 4 vòng (2 s) thì in trạng thái ra Serial thay cho màn hình."
     },
     {
       "file": "src/main.cpp",
@@ -575,8 +575,8 @@
           "character": 36
         }
       },
-      "title": "⭐ Task: Task 7 – task7_logger (dòng 357)",
-      "description": "### ⭐ Task 7 – task7_logger\n*🔁 Task · src/main.cpp, dòng 357*\n\n> ⭐ **Phần quan trọng.** Gatekeeper: task duy nhất được dùng Serial.\n\n| | |\n|---|---|\n| **Chức năng** | Lấy log từ queue và in ra Serial |\n| **Nhân / Prio / Stack** | 0 / 1 / 3 072 B |\n| **Chờ bằng** | `xQueueReceive(portMAX_DELAY)` |\n"
+      "title": "Task: Task 7 – task7_logger (dòng 357)",
+      "description": "### Task 7 – task7_logger\n*🔁 Task · src/main.cpp, dòng 357*\n\n| | |\n|---|---|\n| **Chức năng** | Lấy log từ queue và in ra Serial |\n| **Nhân / Prio / Stack** | 0 / 1 / 3 072 B |\n| **Chờ bằng** | `xQueueReceive(portMAX_DELAY)` |\n"
     },
     {
       "file": "src/main.cpp",
@@ -607,8 +607,8 @@
           "character": 53
         }
       },
-      "title": "⭐ Lệnh FreeRTOS: xQueueReceive(portMAX_DELAY) (dòng 360)",
-      "description": "### ⭐ xQueueReceive(portMAX_DELAY)\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 360*\n\n> ⭐ **Phần quan trọng.** Đầu nhận của queue log; mọi `logf()` đổ về đây.\n\nTask 7 nằm Blocked cho tới khi queue có tin, không tốn CPU. Lấy được tin thì in ra Serial; đây là chỗ duy nhất trong chương trình gọi `Serial.printf` cho log."
+      "title": "Lệnh FreeRTOS: xQueueReceive(portMAX_DELAY) (dòng 360)",
+      "description": "### xQueueReceive(portMAX_DELAY)\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 360*\n\nTask 7 nằm Blocked cho tới khi queue có tin, không tốn CPU. Lấy được tin thì in ra Serial; đây là chỗ duy nhất trong chương trình gọi `Serial.printf` cho log."
     },
     {
       "file": "src/main.cpp",
@@ -639,8 +639,8 @@
           "character": 33
         }
       },
-      "title": "⭐ Ngắt (ISR): isr_boot() (dòng 368)",
-      "description": "### ⭐ isr_boot()\n*⚡ Ngắt (ISR) · src/main.cpp, dòng 368*\n\n> ⭐ **Phần quan trọng.** Quy tắc của ISR: ngắn, không chờ, chỉ dùng hàm FromISR.\n\n| | |\n|---|---|\n| **Kích hoạt** | Cạnh xuống nút BOOT (gắn ở dòng 444) |\n| **IRAM_ATTR** | Đặt hàm trong RAM trong, chạy được cả khi đang ghi flash |\n"
+      "title": "Ngắt (ISR): isr_boot() (dòng 368)",
+      "description": "### isr_boot()\n*⚡ Ngắt (ISR) · src/main.cpp, dòng 368*\n\n| | |\n|---|---|\n| **Kích hoạt** | Cạnh xuống nút BOOT (gắn ở dòng 444) |\n| **IRAM_ATTR** | Đặt hàm trong RAM trong, chạy được cả khi đang ghi flash |\n"
     },
     {
       "file": "src/main.cpp",
@@ -671,8 +671,8 @@
           "character": 45
         }
       },
-      "title": "⭐ Lệnh FreeRTOS: vTaskNotifyGiveFromISR (dòng 370)",
-      "description": "### ⭐ vTaskNotifyGiveFromISR\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 370*\n\n> ⭐ **Phần quan trọng.** Deferred interrupt processing.\n\nISR chỉ “gõ cửa” Task 8 bằng task notification (nhẹ hơn semaphore, không cần tạo đối tượng). Việc nặng để Task 8 làm."
+      "title": "Lệnh FreeRTOS: vTaskNotifyGiveFromISR (dòng 370)",
+      "description": "### vTaskNotifyGiveFromISR\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 370*\n\nISR chỉ “gõ cửa” Task 8 bằng task notification (nhẹ hơn semaphore, không cần tạo đối tượng). Việc nặng để Task 8 làm."
     },
     {
       "file": "src/main.cpp",

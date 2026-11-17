@@ -15,8 +15,8 @@
           "character": 15
         }
       },
-      "title": "⭐ Hàm: setup() (dòng 409)",
-      "description": "### ⭐ setup()\n*⚙️ Hàm · src/main.cpp, dòng 409*\n\n> ⭐ **Phần quan trọng.** Thứ tự khởi tạo: đối tượng kernel trước, task sau.\n\nChạy một lần khi khởi động, trong `loopTask` của Arduino (nhân 1). Không có biến cục bộ."
+      "title": "Hàm: setup() (dòng 409)",
+      "description": "### setup()\n*⚙️ Hàm · src/main.cpp, dòng 409*\n\nChạy một lần khi khởi động, trong `loopTask` của Arduino (nhân 1). Không có biến cục bộ."
     },
     {
       "file": "src/main.cpp",
@@ -79,8 +79,8 @@
           "character": 73
         }
       },
-      "title": "⭐ Lệnh FreeRTOS: Tạo đối tượng kernel (dòng 424–428)",
-      "description": "### ⭐ Tạo đối tượng kernel\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 424–428*\n\n> ⭐ **Phần quan trọng.** Phải tạo trước khi tạo task.\n\nBinary semaphore (tạo ra rỗng), mutex, queue 16 phần tử `LogMsg`, event group. `configASSERT` dừng chương trình nếu tạo thất bại (thiếu RAM)."
+      "title": "Lệnh FreeRTOS: Tạo đối tượng kernel (dòng 424–428)",
+      "description": "### Tạo đối tượng kernel\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 424–428*\n\nBinary semaphore (tạo ra rỗng), mutex, queue 16 phần tử `LogMsg`, event group. `configASSERT` dừng chương trình nếu tạo thất bại (thiếu RAM)."
     },
     {
       "file": "src/main.cpp",
@@ -111,8 +111,8 @@
           "character": 101
         }
       },
-      "title": "⭐ Lệnh FreeRTOS: xTaskCreatePinnedToCore (dòng 435–442)",
-      "description": "### ⭐ xTaskCreatePinnedToCore\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 435–442*\n\n> ⭐ **Phần quan trọng.** Câu hỏi về nhân và priority.\n\n| | |\n|---|---|\n| **Tham số** | (hàm task, tên, stack byte, tham số, priority, &handle, nhân) |\n| **Nhân 1** | led1, btn1, btn2, led3: phản hồi nhanh, chỉ dùng GPIO |\n| **Nhân 0** | logger, sensor, oled, monitor: I/O chậm (ADC, I2C, USB) |\n| **Thứ tự** | Logger tạo đầu tiên để có chỗ nhận log ngay |\n"
+      "title": "Lệnh FreeRTOS: xTaskCreatePinnedToCore (dòng 435–442)",
+      "description": "### xTaskCreatePinnedToCore\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 435–442*\n\n| | |\n|---|---|\n| **Tham số** | (hàm task, tên, stack byte, tham số, priority, &handle, nhân) |\n| **Nhân 1** | led1, btn1, btn2, led3: phản hồi nhanh, chỉ dùng GPIO |\n| **Nhân 0** | logger, sensor, oled, monitor: I/O chậm (ADC, I2C, USB) |\n| **Thứ tự** | Logger tạo đầu tiên để có chỗ nhận log ngay |\n"
     },
     {
       "file": "src/main.cpp",
@@ -159,8 +159,8 @@
           "character": 2
         }
       },
-      "title": "⭐ Hàm: loop() (dòng 452–455)",
-      "description": "### ⭐ loop()\n*⚙️ Hàm · src/main.cpp, dòng 452–455*\n\n> ⭐ **Phần quan trọng.** Hỏi: loop() để làm gì?\n\n`vTaskDelete(NULL)`: `loopTask` của Arduino tự xoá chính nó để trả lại RAM. Từ đây chỉ còn các task FreeRTOS chạy."
+      "title": "Hàm: loop() (dòng 452–455)",
+      "description": "### loop()\n*⚙️ Hàm · src/main.cpp, dòng 452–455*\n\n`vTaskDelete(NULL)`: `loopTask` của Arduino tự xoá chính nó để trả lại RAM. Từ đây chỉ còn các task FreeRTOS chạy."
     }
   ]
 }

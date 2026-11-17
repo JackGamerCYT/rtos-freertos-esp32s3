@@ -15,8 +15,8 @@
           "character": 39
         }
       },
-      "title": "⭐ Hàm: logf() (dòng 66)",
-      "description": "### ⭐ logf()\n*⚙️ Hàm · src/main.cpp, dòng 66*\n\n> ⭐ **Phần quan trọng.** Mọi log đi qua đây, không task nào bị chặn vì in ấn.\n\nHàm ghi log dùng chung. Không in trực tiếp mà đóng gói thành `LogMsg` rồi gửi vào queue cho Task 7. Không được gọi từ ISR."
+      "title": "Hàm: logf() (dòng 66)",
+      "description": "### logf()\n*⚙️ Hàm · src/main.cpp, dòng 66*\n\nHàm ghi log dùng chung. Không in trực tiếp mà đóng gói thành `LogMsg` rồi gửi vào queue cho Task 7. Không được gọi từ ISR."
     },
     {
       "file": "src/main.cpp",
@@ -95,8 +95,8 @@
           "character": 36
         }
       },
-      "title": "⭐ Lệnh FreeRTOS: xQueueSend(..., 0) (dòng 73)",
-      "description": "### ⭐ xQueueSend(..., 0)\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 73*\n\n> ⭐ **Phần quan trọng.** Timeout 0 nghĩa là không bao giờ chờ.\n\nGửi vào queue với thời gian chờ 0. Queue đầy thì trả về lỗi ngay và tăng `g_logDropped` (dòng 74–76, trong critical section)."
+      "title": "Lệnh FreeRTOS: xQueueSend(..., 0) (dòng 73)",
+      "description": "### xQueueSend(..., 0)\n*🔒 Lệnh FreeRTOS · src/main.cpp, dòng 73*\n\nGửi vào queue với thời gian chờ 0. Queue đầy thì trả về lỗi ngay và tăng `g_logDropped` (dòng 74–76, trong critical section)."
     },
     {
       "file": "src/main.cpp",
@@ -207,8 +207,8 @@
           "character": 2
         }
       },
-      "title": "⭐ Hàm: pressed_edge() (dòng 140–149)",
-      "description": "### ⭐ pressed_edge()\n*⚙️ Hàm · src/main.cpp, dòng 140–149*\n\n> ⭐ **Phần quan trọng.** Chống dội nút bằng phần mềm.\n\nTrả `true` đúng 1 lần mỗi lần nhấn.\n\n1. Mức đọc khác lần trước → ghi lại thời điểm đổi.\n2. Mức mới giữ đủ 30 ms và khác mức ổn định → cập nhật mức ổn định.\n3. Nếu mức mới là LOW (nút vừa được nhấn) thì trả `true`."
+      "title": "Hàm: pressed_edge() (dòng 140–149)",
+      "description": "### pressed_edge()\n*⚙️ Hàm · src/main.cpp, dòng 140–149*\n\nTrả `true` đúng 1 lần mỗi lần nhấn.\n\n1. Mức đọc khác lần trước → ghi lại thời điểm đổi.\n2. Mức mới giữ đủ 30 ms và khác mức ổn định → cập nhật mức ổn định.\n3. Nếu mức mới là LOW (nút vừa được nhấn) thì trả `true`."
     },
     {
       "file": "src/main.cpp",
@@ -303,8 +303,8 @@
           "character": 52
         }
       },
-      "title": "⭐ Biến cục bộ: ls, lc (trong probe_pair) (dòng 224)",
-      "description": "### ⭐ ls, lc (trong probe_pair)\n*📍 Biến cục bộ · src/main.cpp, dòng 224*\n\n> ⭐ **Phần quan trọng.** Đây là cách phát hiện lỗi GPIO8 bị chập GND.\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `int` |\n| **Thuộc** | `probe_pair()` |\n| **Tồn tại** | Tạo khi vào hàm, mất khi hàm kết thúc (nằm trên stack của task) |\n\nMức của SDA và SCL sau khi bật pull-up. Có pull-up mà vẫn đọc 0 nghĩa là dây đang nối xuống GND → bỏ qua cặp này."
+      "title": "Biến cục bộ: ls, lc (trong probe_pair) (dòng 224)",
+      "description": "### ls, lc (trong probe_pair)\n*📍 Biến cục bộ · src/main.cpp, dòng 224*\n\n| | |\n|---|---|\n| **Loại** | Biến cục bộ |\n| **Kiểu** | `int` |\n| **Thuộc** | `probe_pair()` |\n| **Tồn tại** | Tạo khi vào hàm, mất khi hàm kết thúc (nằm trên stack của task) |\n\nMức của SDA và SCL sau khi bật pull-up. Có pull-up mà vẫn đọc 0 nghĩa là dây đang nối xuống GND → bỏ qua cặp này."
     },
     {
       "file": "src/main.cpp",
