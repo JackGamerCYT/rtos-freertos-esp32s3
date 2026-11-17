@@ -22,7 +22,10 @@ RTOS_Project/
 │   ├── 05_rtl/                      Verilog NPU + testbench + vector + kết quả mô phỏng
 │   └── 06_ps_petalinux/             driver/app PS, giả lập trên PC, Vivado TCL, PetaLinux
 ├── 03_Reports/
-    ├── Report_Project_CaNhan_FreeRTOS_v2.docx   báo cáo cá nhân (bản mới, ít code, nhiều hình)
+    ├── Report_Project_CaNhan_FreeRTOS_v2.docx / .pdf   báo cáo cá nhân (bản mới, ít code, nhiều hình)
+    ├── Report_Personal_Project_FreeRTOS_EN.docx / .pdf   báo cáo cá nhân bản tiếng Anh
+    ├── Slide_BaoCao_CuoiKy_ProjectCaNhan.pptx   slide báo cáo cuối kỳ (lời thuyết trình trong Notes)
+    ├── TaiLieu_On_BaoVe_ProjectCaNhan.docx / .pdf   tài liệu ôn bảo vệ: giải thích từng phần + câu hỏi thường gặp
     ├── Slide_Tuan2_ProjectCaNhan.pptx
     ├── Slide_Tuan3_ProjectCaNhan.pptx
     ├── Slide_Tuan4_ProjectCaNhan.pptx
